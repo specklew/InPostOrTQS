@@ -1,7 +1,3 @@
-
-![Logo](https://upload.wikimedia.org/wikipedia/commons/c/cc/Super_bock.png)
-
-
 # GrabDropTQS
 
 Final project repository for TQS classes.
