@@ -1,4 +1,4 @@
-# GrabDropTQS
+# InPostOrTQS
 
 Final project repository for TQS classes.
 
