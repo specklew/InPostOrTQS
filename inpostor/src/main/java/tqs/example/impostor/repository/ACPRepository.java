@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface ACPRepository extends JpaRepository<ACP, Long> {
 
     boolean existsByAddress(String address);
-    Optional<ACP> findByAddress(String address);
+    ACP findByAddress(String address);
 }
