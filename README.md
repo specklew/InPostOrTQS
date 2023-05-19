@@ -1,32 +1,32 @@
+
 # InPostOrTQS
 
-Final project repository for TQS classes.
+The purpose of the project is to create a system that delivery system in order to make the connection between the vendor and the client easier.
 
 
-## QA practices follow throught the project
+## Authors
 
-#### Testing 
+- [@Maciej Adamczewski (Team Coordinator)](https://github.com/specklew)
+- [@Malwina Schonhofer (DevOps)](https://github.com/MSchonhofer)
+- [@Juliusz Szymajda ](https://github.com/julek987)
+- [@Piotr Czapla (QA)](https://github.com/Garzzza7)
 
-We are going to use libraries such as JUnit5, Mockito etc in order to test the code on both integration and unit level.
+## Project Backlog
 
-#### Planning tools
+For tracking backlog we are using JIRA 
 
-In order no to spread ourselves too thin we decided to keep everything in one place, hence we keep track of your tasks and backlog on Jira.
-#### Reporting
 
-For reporting we picked SonarLint as a more programmer-friendly approach than SonarQube since SonarLint is a plugin built-in InteliJ IDE which makes it more comfortable to use. However we are still going to use SonarQube for quality control and making user that the code meets the standards.
+## API documentation
 
-#### Documentation
+[Link (TBA)](https://linktodocumentation)
 
-The code shall be well documented.
-#### Goal
 
-Our goal is to create a great, maintanable webservice which will destroy those cheap copies for example Impost
-#### Automation
+## Static analysis
 
-We are going to use Github Action is order to automate quality assurance while pushing the code to the repository.
+For static code analysis we are using SonarLint (build in plugin)
+and SonarQube.
 
-## Documentation
 
-[The code is the documentation](https://youtu.be/dQw4w9WgXcQ)
+## CI/CD environment
 
+For continous integration/development we used Github Actions which also are connected with SonarQube
