@@ -52,6 +52,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>inpostor</finalName>
 	</build>
 
 </project>
