@@ -8,7 +8,7 @@ public class Order {
     @Id
     private Long id;
 
-    private
+
 
     public void setId(Long id) {
         this.id = id;
