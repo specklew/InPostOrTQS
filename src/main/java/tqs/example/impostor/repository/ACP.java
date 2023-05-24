@@ -2,20 +2,18 @@ package tqs.example.impostor.repository;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name="ACP")
+@Table(name = "ACP")
 public class ACP {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(
-            mappedBy = "acp",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "acp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Order> orders;
 
     @Column(name = "address")
@@ -24,7 +22,8 @@ public class ACP {
     @Column(name = "capacity")
     private float capacity;
 
-    public ACP(){}
+    public ACP() {
+    }
 
     public ACP(String address, float capacity) {
         this.address = address;
@@ -61,5 +60,18 @@ public class ACP {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ACP acp = (ACP) o;
+        return Objects.equals(id, acp.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
