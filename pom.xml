@@ -15,7 +15,7 @@
 	<description>Inpostor backend application.</description>
 	<properties>
 		<java.version>19</java.version>
-		<sonar.organization>specklew</sonar.organization>
+		<sonar.organization>seszuave</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
