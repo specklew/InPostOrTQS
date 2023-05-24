@@ -2,12 +2,21 @@ package tqs.example.impostor.repository;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
+@Table(name="ACP")
 public class ACP {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(
+            mappedBy = "acp",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Order> orders;
 
     @Column(name = "address")
     private String address;
@@ -20,6 +29,14 @@ public class ACP {
     public ACP(String address, float capacity) {
         this.address = address;
         this.capacity = capacity;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> order) {
+        this.orders = order;
     }
 
     public String getAddress() {
