@@ -40,6 +40,6 @@ class ACPRepositoryTest {
     @Test
     void givenWrongAddress_whenFindByAddress_thenReturnNull() {
         ACP found = repository.findByAddress("Wrong Address");
-        assertThat(found).isEqualTo(null);
+        assertThat(found).isNull();
     }
 }
