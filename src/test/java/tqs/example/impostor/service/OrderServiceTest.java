@@ -3,6 +3,8 @@ package tqs.example.impostor.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,8 +15,10 @@ import tqs.example.impostor.repository.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -41,6 +45,7 @@ class OrderServiceTest {
         acp.setCapacity(0.5f);
 
         Order order1 = new Order();
+        order1.setId(1L);
         order1.setAcp(acp);
         order1.setOwner("owner1");
         order1.setShopName("shopName1");
@@ -48,6 +53,7 @@ class OrderServiceTest {
         orders.add(order1);
 
         Order order2 = new Order();
+        order2.setId(2L);
         order2.setAcp(acp);
         order2.setOwner("owner2");
         order2.setShopName("shopName2");
@@ -55,48 +61,161 @@ class OrderServiceTest {
         orders.add(order2);
 
         Order order3 = new Order();
+        order3.setId(3L);
         order3.setAcp(acp);
         order3.setOwner("owner1");
         order3.setShopName("shopName1");
         order3.setDeliverer("deliverer2");
         orders.add(order3);
 
-        when(acpRepository.findByAddress(any(String.class))).thenReturn(Optional.of(acp));
+        when(acpRepository.findByAddress(acp.getAddress())).thenReturn(Optional.of(acp));
+        when(acpRepository.findByAddress("wrong")).thenReturn(Optional.empty());
 
         for(Order order : orders){
             when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
+            when(orderRepository.existsById(order.getId())).thenReturn(true);
         }
+
+        when(orderRepository.findAllByAcp(acp)).thenReturn(orders);
+        when(orderRepository.findAllByOwner("owner1")).thenReturn(List.of(order1, order3));
+        when(orderRepository.findAllByOwner("owner2")).thenReturn(List.of(order2));
+        when(orderRepository.findAllByShopName("shopName1")).thenReturn(List.of(order1, order3));
+        when(orderRepository.findAllByShopName("shopName2")).thenReturn(List.of(order2));
+        when(orderRepository.findAllByDeliverer("deliverer1")).thenReturn(List.of(order1));
+        when(orderRepository.findAllByDeliverer("deliverer2")).thenReturn(List.of(order2, order3));
     }
 
     @Test
-    void createOrder() {
+    void givenCorrectData_whenCreateOrder_thenReturnTrue() {
+        assertThat(service.createOrder(acp.getAddress(), "correct", "correct", null)).isTrue();
     }
 
     @Test
-    void readOrder() {
+    void givenWrongData_whenCreateOrder_thenReturnFalse() {
+        assertThat(service.createOrder(null, null, null, null)).isFalse();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0,1,2})
+    void givenOrderId_whenReadOrder_thenReturnOrder(int id) {
+        assertThat(service.readOrder(orders.get(id).getId())).isEqualTo(orders.get(id));
     }
 
     @Test
-    void readOrdersByACPAddress() {
+    void givenWrongOrderId_whenReadOrder_thenReturnNull() {
+        assertThat(service.readOrder(-1L)).isNull();
     }
 
     @Test
-    void readOrdersByOwner() {
+    void givenACPAddress_whenReadOrdersByACPAddress_thenReturnListOfOrders() {
+        assertThat(service.readOrdersByACPAddress(acp.getAddress())).isEqualTo(orders);
     }
 
     @Test
-    void readOrdersByShopName() {
+    void givenWrongACPAddress_whenReadOrdersByACPAddress_thenReturnEmptyList() {
+        assertThat(service.readOrdersByACPAddress("wrong")).isNull();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0,1,2})
+    void givenOwner_whenReadOrdersByOwner_thenReturnListOfOrders(int id) {
+
+        List<Order> orderList = new ArrayList<>();
+
+        for(Order order : orders){
+            if(Objects.equals(order.getOwner(), orders.get(id).getOwner())){
+                orderList.add(order);
+            }
+        }
+
+        assertThat(service.readOrdersByOwner(orders.get(id).getOwner()))
+                .asList().containsExactlyInAnyOrderElementsOf(orderList);
     }
 
     @Test
-    void readOrdersByDeliverer() {
+    void givenWrongOwner_whenReadOrdersByOwner_thenReturnEmptyList() {
+        assertThat(service.readOrdersByOwner("wrong")).asList().isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0,1,2})
+    void givenShopName_whenReadOrdersByShopName_thenReturnListOfOrders(int id) {
+
+        List<Order> orderList = new ArrayList<>();
+
+        for(Order order : orders){
+            if(Objects.equals(order.getShopName(), orders.get(id).getShopName())){
+                orderList.add(order);
+            }
+        }
+
+        assertThat(service.readOrdersByShopName(orders.get(id).getShopName()))
+                .asList().containsExactlyInAnyOrderElementsOf(orderList);
     }
 
     @Test
-    void updateOrder() {
+    void givenWrongShopName_whenReadOrdersByShopName_thenReturnEmptyList() {
+        assertThat(service.readOrdersByShopName("wrong")).asList().isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0,1,2})
+    void givenDeliverer_whenReadOrdersByDeliverer_thenReturnListOfOrders(int id) {
+
+        List<Order> orderList = new ArrayList<>();
+
+        for(Order order : orders){
+            if(Objects.equals(order.getDeliverer(), orders.get(id).getDeliverer())){
+                orderList.add(order);
+            }
+        }
+
+        assertThat(service.readOrdersByDeliverer(orders.get(id).getDeliverer()))
+                .asList().containsExactlyInAnyOrderElementsOf(orderList);
     }
 
     @Test
-    void deleteOrder() {
+    void givenWrongDeliverer_whenReadOrdersByDeliverer_thenReturnEmptyList() {
+        assertThat(service.readOrdersByDeliverer("wrong")).asList().isEmpty();
+    }
+
+    @Test
+    void givenCorrectData_whenUpdateOrder_thenReturnTrue() {
+        assertThat(service.updateOrder(
+                orders.get(0).getId(),
+                acp.getAddress(),
+                null,
+                null,
+                null)).isTrue();
+    }
+
+    @Test
+    void givenWrongACP_whenUpdateOrder_thenReturnFalse() {
+        assertThat(service.updateOrder(
+                orders.get(0).getId(),
+                "wrong",
+                null,
+                null,
+                null)).isFalse();
+    }
+
+    @Test
+    void givenWrongId_whenUpdateOrder_thenReturnFalse() {
+        assertThat(service.updateOrder(
+                -1L,
+                acp.getAddress(),
+                null,
+                null,
+                null)).isFalse();
+    }
+
+    @Test
+    void givenId_whenDeleteOrder_thenReturnTrue() {
+        assertThat(service.deleteOrder(orders.get(0).getId())).isTrue();
+    }
+
+    @Test
+    void givenWrongId_whenDeleteOrder_thenReturnFalse() {
+        assertThat(service.deleteOrder(-1L)).isFalse();
     }
 }
