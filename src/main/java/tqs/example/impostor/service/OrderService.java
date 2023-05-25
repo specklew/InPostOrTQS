@@ -29,7 +29,7 @@ public class OrderService {
      * @param shopName Name of the shop that the order is sent from.
      * @param owner Owner of that order (the one who ordered a package).
      * @param deliverer Delivery service that should deliver the package. (Can be {@code null}).
-     * @return - True if acp with provided address exits and the order is successfully saved, false else wise.
+     * @return - True if acp with provided address exits and the order is successfully saved, false otherwise.
      */
     public boolean createOrder(String acpAddress, String shopName, String owner, String deliverer) {
 
@@ -124,5 +124,18 @@ public class OrderService {
         return true;
     }
 
-    
+    //Delete
+
+    /**
+     * @param id The id of the order that has to be deleted.
+     * @return True if the order is successfully deleted, false otherwise.
+     */
+    public boolean deleteOrder(long id){
+        if(!orderRepository.existsById(id)) return false;
+        orderRepository.deleteById(id);
+        return true;
+    }
+
+    // Maybe we could add some methods to clean all the orders that belong to one ACP, etc...
+    // We will do that if it turns out to be necessary later in the development.
 }
