@@ -1,5 +1,6 @@
 package tqs.example.impostor.repository;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -73,7 +75,9 @@ public class OrderRepositoryTest {
     @Test
     void givenWrongACP_whenFindAllByACP_thenReturnEmptyList() {
         acpRepository.saveAndFlush(new ACP("2", 11f));
-        assertThat(orderRepository.findAllByAcp(acpRepository.findByAddress("2"))).isEmpty();
+        Optional<ACP> acp = acpRepository.findByAddress("2");
+        if(acp.isEmpty()) Assertions.fail();
+        assertThat(orderRepository.findAllByAcp(acp.get())).isEmpty();
     }
 
     @Test

@@ -1,9 +1,12 @@
 package tqs.example.impostor.repository;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,13 +36,14 @@ class ACPRepositoryTest {
 
     @Test
     void givenCorrectAddress_whenFindByAddress_thenReturnACP() {
-        ACP found = repository.findByAddress(testAcp1.getAddress());
-        assertThat(found.getCapacity()).isEqualTo(testAcp1.getCapacity());
+        Optional<ACP> found = repository.findByAddress(testAcp1.getAddress());
+        if(found.isEmpty()) Assertions.fail();
+        assertThat(found.get().getCapacity()).isEqualTo(testAcp1.getCapacity());
     }
 
     @Test
-    void givenWrongAddress_whenFindByAddress_thenReturnNull() {
-        ACP found = repository.findByAddress("Wrong Address");
-        assertThat(found).isNull();
+    void givenWrongAddress_whenFindByAddress_thenReturnEmpty() {
+        Optional<ACP> found = repository.findByAddress("Wrong Address");
+        assertThat(found).isEmpty();
     }
 }
