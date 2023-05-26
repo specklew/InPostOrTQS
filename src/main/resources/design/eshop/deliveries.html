@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Deliveries</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <style>
+        .navbar-center {
+            flex-grow: 1;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-left: 500px; /* Adjust the margin as desired */
+        }
+        .navbar-center span {
+            color: #000;
+            font-size: 19px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            display: inline-block;
+        }
+        .container {
+            margin-top: 40px;
+        }
+
+        .sort-icon {
+            margin-left: 5px;
+            font-size: 12px;
+        }
+
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar has-shadow" role="navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item">
+            InPostor
+        </a>
+    </div>
+
+    <div class="navbar-center">
+        <span class="is-uppercase">ADMIN MANAGEMENT SYSTEM</span>
+    </div>
+
+<!-- Navbar menu -->
+<div class="navbar-end">
+    <div class="navbar-item">
+        <div class="field">
+            <p class="control">
+                <a href="ACP.html" class="button">
+            <span class="icon">
+              <ion-icon name="navigate"></ion-icon>
+            </span>
+                    <span>ACP Register</span>
+                </a>
+                <a href="deliveries.html" class="button">
+            <span class="icon">
+              <ion-icon name="cart"></ion-icon>
+            </span>
+                    <span>Deliveries</span>
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+</nav>
+
+
+<div class="container">
+    <table class="table is-fullwidth">
+        <thead>
+        <tr>
+            <th>Parcel number</th>
+            <th>Buyer email address</th>
+            <th>
+                <a href="#" class="sortable-header" data-sort-by="order-date">Order date</a>            <span class="sort-icon"></span>
+
+            </th>
+            <th>
+                <a href="#" class="sortable-header" data-sort-by="delivery-date">Delivery Date</a>            <span class="sort-icon"></span>
+
+            </th>
+            <th>
+                <a href="#" class="sortable-header" data-sort-by="status">Status</a>            <span class="sort-icon"></span>
+
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Add your table rows here -->
+        <tr>
+            <td>123</td>
+            <td>XYZ@example.com</td>
+            <td>2023-05-25</td>
+            <td>2023-05-29</td>
+            <td>In transit</td>
+        </tr>
+        <tr>
+            <td>456</td>
+            <td>ZYX@example.com</td>
+            <td>2023-05-23</td>
+            <td>2023-05-27</td>
+            <td>Delivered</td>
+        </tr>
+        <tr>
+            <td>789</td>
+            <td>AVE@example.com</td>
+            <td>2023-05-24</td>
+            <td>2023-05-31</td>
+            <td>Shipped</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+// TO BE DONE
+<script>
+    const sortableHeaders = document.querySelectorAll('.sortable-header');
+
+    sortableHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const sortBy = header.dataset.sortBy;
+            const sortIcon = header.querySelector('.sort-icon');
+
+            if (sortIcon.classList.contains('ion-arrow-down-outline')) {
+                sortIcon.classList.remove('ion-arrow-down-outline');
+                sortIcon.classList.add('ion-arrow-up-outline');
+                sortTable(sortBy, 'asc');
+            } else {
+                sortIcon.classList.remove('ion-arrow-up-outline');
+                sortIcon.classList.add('ion-arrow-down-outline');
+                sortTable(sortBy, 'desc');
+            }
+        });
+    });
+
+    function sortTable(sortBy, sortOrder) {
+        const table = document.querySelector('.table');
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+        rows.sort((rowA, rowB) => {
+            const valueA = rowA.querySelector(`td:nth-child(${getColumnIndex(sortBy)})`).textContent;
+            const valueB = rowB.querySelector(`td:nth-child(${getColumnIndex(sortBy)})`).textContent;
+
+            if (sortOrder === 'desc') {
+                return valueB.localeCompare(valueA);
+            } else {
+                return valueA.localeCompare(valueB);
+            }
+        });
+
+        table.querySelector('tbody').innerHTML = '';
+        rows.forEach(row => {
+            table.querySelector('tbody').appendChild(row);
+        });
+    }
+
+    function getColumnIndex(sortBy) {
+        const headers = document.querySelectorAll('th');
+        let index = 0;
+
+        headers.forEach((header, i) => {
+            if (header.querySelector('.sortable-header').dataset.sortBy === sortBy) {
+                index = i + 1;
+            }
+        });
+
+        return index;
+    }
+</script>
+</body>
+</html>
+
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+
