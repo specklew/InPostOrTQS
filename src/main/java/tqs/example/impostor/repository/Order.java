@@ -15,6 +15,10 @@ public class Order {
     @JoinColumn(name = "acp_id", nullable = false)
     private ACP acp;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "locker_id", nullable = false)
+    private Locker locker;
+
     @Column(nullable = false)
     private String shopName;
 
@@ -39,6 +43,14 @@ public class Order {
 
     public void setAcp(ACP acp) {
         this.acp = acp;
+    }
+
+    public Locker getLocker() {
+        return locker;
+    }
+
+    public void setLocker(Locker locker) {
+        this.locker = locker;
     }
 
     public String getDeliverer() {

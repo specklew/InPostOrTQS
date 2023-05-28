@@ -10,6 +10,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findAllByAcp(ACP acp);
 
+    List<Order> findAllByLocker(Locker locker);
+
     List<Order> findAllByOwner(String owner);
 
     List<Order> findAllByShopName(String shopName);
