@@ -20,19 +20,50 @@ public class AdminService implements AdminServiceInterface{
     @Autowired
     private ACPRepository acpRepository;
 
+    public AdminService(AdminRepository adminRepository){
+        this.adminRepository = adminRepository;
+    }
+
+    // Create
+    public Admin saveAdmin(Admin admin) {
+        return adminRepository.save(admin);
+    }
+
+    // Read
+    public Admin getAdminById(Long id) {
+        return adminRepository.findById(id).orElse(null);
+    }
+
+    // Update
+    public Admin updateAdmin(Admin admin) {
+        return adminRepository.save(admin);
+    }
+
+    // Delete
+    public void deleteAdmin(Long id) {
+        adminRepository.deleteById(id);
+    }
+
     @Override
     public boolean passwordVerification(String userName, String password) {
-        Admin desiredAdmin = adminRepository.findByUserName(userName).orElse(null);
-        assert desiredAdmin != null;
-        return Objects.equals(desiredAdmin.getPassword(), password);
+        Optional<Admin> desiredAdminOptional = adminRepository.findByUserName(userName);
+        if (desiredAdminOptional.isPresent()) {
+            Admin desiredAdmin = desiredAdminOptional.get();
+            return Objects.equals(desiredAdmin.getPassword(), password);
+        }
+        return false;
     }
 
     @Override
     public String login(String userName, String password){
-        if(passwordVerification(userName, password)) return "ACP";
+        if(passwordVerification(userName, password)) {
+            return "ACP";
+        }
         return "Login failed";
     }
 
+
+    //Functions below are waiting for ACP Service
     @Override
     public List<Order> getPendingOrders() {
         //TODO
