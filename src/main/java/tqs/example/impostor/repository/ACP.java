@@ -22,16 +22,12 @@ public class ACP {
     @Column(name = "capacity")
     private float capacity;
 
-    @Column(name = "ownerSurname")
-    private String ownerSurname;
-
     public ACP() {
     }
 
-    public ACP(String address, float capacity, String ownerSurname) {
+    public ACP(String address, float capacity) {
         this.address = address;
         this.capacity = capacity;
-        this.ownerSurname = ownerSurname;
     }
 
     public Set<Order> getOrders() {
@@ -66,9 +62,6 @@ public class ACP {
         return id;
     }
 
-    public String getOwnerSurname() {return ownerSurname; }
-
-    public void setOwnerSurname(String ownerSurname) {this.ownerSurname = ownerSurname; }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

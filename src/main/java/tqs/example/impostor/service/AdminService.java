@@ -21,11 +21,6 @@ public class AdminService implements AdminServiceInterface{
     private ACPRepository acpRepository;
 
     @Override
-    public String loginPage() {
-        return "admin_login";
-    }
-
-    @Override
     public boolean passwordVerification(String userName, String password) {
         Admin desiredAdmin = adminRepository.findByUserName(userName).orElse(null);
         assert desiredAdmin != null;
@@ -40,21 +35,18 @@ public class AdminService implements AdminServiceInterface{
 
     @Override
     public List<Order> getPendingOrders() {
-        return orderRepository.findAll();
+        //TODO
+        return null;
     }
 
     @Override
     public ACP searchACPById(String acpId) {
-        return acpRepository.findById(Long.valueOf(acpId)).orElse(null);
-    }
-
-    @Override
-    public ACP searchACPByOwnerSurname(String ownerSurname) {
-        return acpRepository.findByOwnerSurname(ownerSurname).orElse(null);
+        //TODO
+        return null;
     }
 
     @Override
     public void addACP(ACP acp) {
-        acpRepository.save(acp);
+        //TODO
     }
 }

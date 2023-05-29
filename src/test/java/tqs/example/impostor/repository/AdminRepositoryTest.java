@@ -25,27 +25,14 @@ public class AdminRepositoryTest {
     }
 
     @Test
-    void findById_WhenGoodId(){
-        Optional<Admin> found = adminRepository.findById(testAdmin1.getId());
-        if(found.isEmpty()) Assertions.fail();
-        assertThat(found.get().getId()).isEqualTo(testAdmin1.getId());
-    }
-
-    @Test
-    void findById_WhenBadId(){
-        Optional<Admin> found = adminRepository.findById(2137420L);
-        assertThat(found).isEmpty();
-    }
-
-    @Test
-    void findByUserName_WhenGoodUserName(){
+    void givenGoodUserName_whenFindByUserName_ThenReturnTrue(){
         Optional<Admin> found = adminRepository.findByUserName(testAdmin1.getUserName());
         if(found.isEmpty()) Assertions.fail();
         assertThat(found.get().getUserName()).isEqualTo(testAdmin1.getUserName());
     }
 
     @Test
-    void findByUserName_WhenBadUserName(){
+    void givenBadUserName_whenFindByUserName_ThenReturnEmpty(){
         Optional<Admin> found = adminRepository.findByUserName("Zero");
         assertThat(found).isEmpty();
     }

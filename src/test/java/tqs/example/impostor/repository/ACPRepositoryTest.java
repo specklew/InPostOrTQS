@@ -20,7 +20,7 @@ class ACPRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        testAcp1 = new ACP("Portugal, Aveiro, 42 Rua dos Marnotos, 95-100", 10.4f, "Kowalski");
+        testAcp1 = new ACP("Portugal, Aveiro, 42 Rua dos Marnotos, 95-100", 10.4f);
         repository.saveAndFlush(testAcp1);
     }
 
@@ -44,19 +44,6 @@ class ACPRepositoryTest {
     @Test
     void givenWrongAddress_whenFindByAddress_thenReturnEmpty() {
         Optional<ACP> found = repository.findByAddress("Wrong Address");
-        assertThat(found).isEmpty();
-    }
-
-    @Test
-    void givenCorrectSurname_whenFindByOwnerSurname_thenReturnACP() {
-        Optional<ACP> found = repository.findByOwnerSurname(testAcp1.getOwnerSurname());
-        if(found.isEmpty()) Assertions.fail();
-        assertThat(found.get().getCapacity()).isEqualTo(testAcp1.getCapacity());
-    }
-
-    @Test
-    void givenWrongSurname_whenFindByOwnerSurname_thenReturnEmpty() {
-        Optional<ACP> found = repository.findByOwnerSurname("Wrong Surname");
         assertThat(found).isEmpty();
     }
 }
