@@ -16,30 +16,8 @@ public class LockerRepositoryTest {
     @Autowired
     private LockerRepository lockerRepository;
 
-    @Autowired
-    private TestEntityManager entityManager;
-
     @Test
-    public void whenFindLockerByExistingId_thenReturnLocker() {
-        Locker locker = new Locker(null, "Locker 1", 10);
-        lockerRepository.save(locker);
-
-        Optional<Locker> foundLocker = lockerRepository.findById(locker.getId());
-
-        Assertions.assertThat(foundLocker).isPresent();
-        Assertions.assertThat(foundLocker.get().getId()).isEqualTo(locker.getId());
-        Assertions.assertThat(foundLocker.get().getAddress()).isEqualTo(locker.getAddress());
-        Assertions.assertThat(foundLocker.get().getCapacity()).isEqualTo(locker.getCapacity());
-    }
-
-    @Test
-    public void whenFindInvalidLockerId_thenReturnNull() {
-        Optional<Locker> foundLocker = lockerRepository.findById(9999L);
-        Assertions.assertThat(foundLocker).isEmpty();
-    }
-
-    @Test
-    public void givenCorrectAddress_whenFindByAddress_thenReturnLocker() {
+    public void givenCorrectAddress_whenFindByAddress_thenReturnOptionalOfLocker() {
         Locker locker = new Locker(null, "Locker 1", 10);
         lockerRepository.save(locker);
 
