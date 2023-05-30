@@ -15,10 +15,7 @@ public class AdminService implements AdminServiceInterface{
     private AdminRepository adminRepository;
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private ACPRepository acpRepository;
+    private ACPService acpService;
 
     public AdminService(AdminRepository adminRepository){
         this.adminRepository = adminRepository;
@@ -70,14 +67,12 @@ public class AdminService implements AdminServiceInterface{
         return null;
     }
 
-    @Override
-    public ACP searchACPById(String acpId) {
-        //TODO
-        return null;
+    public Optional<ACP> searchACPById(Long acpId) {
+        return acpService.searchACPbyID(acpId);
     }
 
     @Override
-    public void addACP(ACP acp) {
-        //TODO
+    public void addACP(Long id,String address, float capacity) {
+        acpService.createACP(id, address, capacity);
     }
 }

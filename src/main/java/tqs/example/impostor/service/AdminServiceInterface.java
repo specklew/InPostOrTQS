@@ -10,6 +10,6 @@ public interface AdminServiceInterface {
     boolean passwordVerification(String userName, String password);
     String login(String userName, String password);
     List<Order> getPendingOrders();
-    ACP searchACPById(String acpId);
-    void addACP(ACP acp);
+    Optional<ACP> searchACPById(Long acpId);
+    public void addACP(Long id,String address, float capacity);
 }
