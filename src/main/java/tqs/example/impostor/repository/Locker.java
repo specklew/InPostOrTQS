@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "LOCKER")
@@ -65,5 +66,16 @@ public class Locker {
         this.orders = orders;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Locker locker)) return false;
+        return capacity == locker.capacity && Objects.equals(id, locker.id) && Objects.equals(address, locker.address) && Objects.equals(orders, locker.orders);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, address, capacity, orders);
+    }
 }
 

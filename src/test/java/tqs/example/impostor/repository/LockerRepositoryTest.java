@@ -38,6 +38,7 @@ public class LockerRepositoryTest {
     @Test
     public void givenCorrectAddress_whenFindByAddress_thenReturnLocker() {
         Locker locker = new Locker("Locker 1", 10);
+      
         lockerRepository.save(locker);
 
         Optional<Locker> foundLocker = lockerRepository.findByAddress("Locker 1");
