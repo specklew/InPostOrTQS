@@ -1,10 +1,7 @@
 package tqs.example.impostor.service;
 
 import org.springframework.stereotype.Service;
-import tqs.example.impostor.repository.ACP;
-import tqs.example.impostor.repository.ACPRepository;
-import tqs.example.impostor.repository.Order;
-import tqs.example.impostor.repository.OrderRepository;
+import tqs.example.impostor.repository.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +11,12 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ACPRepository acpRepository;
+    private final LockerRepository lockerRepository;
 
-    public OrderService(OrderRepository orderRepository, ACPRepository acpRepository) {
+    public OrderService(OrderRepository orderRepository, ACPRepository acpRepository, LockerRepository lockerRepository) {
         this.orderRepository = orderRepository;
         this.acpRepository = acpRepository;
+        this.lockerRepository = lockerRepository;
     }
 
     //Create.
@@ -69,6 +68,11 @@ public class OrderService {
         return acp.map(value -> orderRepository.findAllByAcp(value)).orElse(null);
     }
 
+    public List<Order> readOrdersByLockerAddress(String lockerAddress){
+        Optional<Locker> locker = lockerRepository.findByAddress(lockerAddress);
+        return locker.map(value -> orderRepository.findAllByLocker(value)).orElse(null);
+    }
+
     /**
      * @param owner The owner of the orders.
      * @return - List of orders that belong to the provided owner.
@@ -102,7 +106,7 @@ public class OrderService {
      * @param id The id of the order that has to be updated.
      * @param acpAddress New acp address of that order.
      * @param shopName New shop name of that order.
-     * @param owner New order of that order.
+     * @param owner New owner of that order.
      * @param deliverer New deliverer of that order.
      * @return - True if the update succeeded, false if it did not.
      */
