@@ -27,8 +27,7 @@ public class Locker {
 
     }
 
-    public Locker(Long id, String address, int capacity) {
-        this.id = id;
+    public Locker(String address, int capacity) {
         this.address = address;
         this.capacity = capacity;
         this.orders = new ArrayList<>();

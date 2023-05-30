@@ -16,12 +16,9 @@ public class LockerRepositoryTest {
     @Autowired
     private LockerRepository lockerRepository;
 
-    @Autowired
-    private TestEntityManager entityManager;
-
     @Test
     public void whenFindLockerByExistingId_thenReturnLocker() {
-        Locker locker = new Locker(null, "Locker 1", 10);
+        Locker locker = new Locker("Locker 1", 10);
         lockerRepository.save(locker);
 
         Optional<Locker> foundLocker = lockerRepository.findById(locker.getId());
@@ -40,7 +37,7 @@ public class LockerRepositoryTest {
 
     @Test
     public void givenCorrectAddress_whenFindByAddress_thenReturnLocker() {
-        Locker locker = new Locker(null, "Locker 1", 10);
+        Locker locker = new Locker("Locker 1", 10);
         lockerRepository.save(locker);
 
         Optional<Locker> foundLocker = lockerRepository.findByAddress("Locker 1");
