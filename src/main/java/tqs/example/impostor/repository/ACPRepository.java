@@ -13,5 +13,5 @@ public interface ACPRepository extends JpaRepository<ACP, Long> {
 
     Optional<ACP> findByAddress(String address);
 
-    Optional<ACP> findByID(Long id);
+    //Optional<ACP> findById(Long id);
 }

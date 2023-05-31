@@ -34,7 +34,7 @@ public class ACPService {
 
     }
     public Optional<ACP> searchACPbyID(Long id){
-        Optional<ACP> acp = acpRepository.findByID(id);
+        Optional<ACP> acp = acpRepository.findById(id);
         return Optional.ofNullable(acp.orElse(null));
     }
 
