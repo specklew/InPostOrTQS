@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class AdminControllerTests {
+class AdminControllerTest {
 
     @Mock
     private AdminService adminService;
@@ -21,7 +21,7 @@ class AdminControllerTests {
     @InjectMocks
     private AdminController adminController;
 
-    public AdminControllerTests() {
+    public AdminControllerTest() {
         MockitoAnnotations.openMocks(this);
     }
 
