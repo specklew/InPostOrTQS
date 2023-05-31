@@ -52,8 +52,6 @@ public class AdminController {
             return ResponseEntity.notFound().build();
         }
 
-        Admin admin = optionalAdmin.get();
-
         if (username == null && password == null) {
             return ResponseEntity.badRequest().body("No update parameters provided");
         }
