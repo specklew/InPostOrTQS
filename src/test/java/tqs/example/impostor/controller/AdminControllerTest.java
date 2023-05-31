@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import tqs.example.impostor.repository.Admin;
 import tqs.example.impostor.service.AdminService;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -25,14 +26,40 @@ class AdminControllerTests {
     }
 
     @Test
-    public void givenValidAdmin_whenCreateAdmin_thenReturnsCreatedStatus() {
-        Admin admin = new Admin("username", "password");
-        when(adminService.saveAdmin(any(Admin.class))).thenReturn(admin);
+    public void givenValidUsernameAndPassword_whenCreateAdmin_thenReturnAdminCreatedSuccessfully() {
+        String username = "admin";
+        String password = "password";
 
-        ResponseEntity<Admin> response = adminController.createAdmin(admin);
+        when(adminService.createAdmin(username, password)).thenReturn(true);
 
-        verify(adminService, times(1)).saveAdmin(admin);
-        assert response.getStatusCode() == HttpStatus.CREATED;
+        ResponseEntity<String> response = adminController.createAdmin(username, password);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Admin created successfully", response.getBody());
+    }
+
+    @Test
+    public void givenNullUsernameAndPassword_whenCreateAdmin_thenReturnInvalidUsernameOrPassword() {
+        String username = null;
+        String password = null;
+
+        ResponseEntity<String> response = adminController.createAdmin(username, password);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Invalid username or password", response.getBody());
+    }
+
+    @Test
+    public void givenFailedAdminCreation_whenCreateAdmin_thenReturnFailedToCreateAdmin() {
+        String username = "admin";
+        String password = "password";
+
+        when(adminService.createAdmin(username, password)).thenReturn(false);
+
+        ResponseEntity<String> response = adminController.createAdmin(username, password);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Failed to create admin", response.getBody());
     }
 
     @Test
@@ -62,30 +89,51 @@ class AdminControllerTests {
     }
 
     @Test
-    public void givenValidAdmin_whenUpdateAdmin_thenReturnsUpdatedAdminWithOkStatus() {
-        Admin admin = new Admin("username", "password");
-        admin.setId(1L);
-        when(adminService.updateAdmin(any(Admin.class))).thenReturn(admin);
+    public void givenValidIdAndUsername_whenUpdateAdmin_thenReturnAdminUpdatedSuccessfully() {
+        Long id = 1L;
+        String username = "newAdmin";
 
-        ResponseEntity<Admin> response = adminController.updateAdmin(admin);
+        Admin admin = new Admin("admin", "password");
+        admin.setId(id);
 
-        verify(adminService, times(1)).updateAdmin(admin);
-        assert response.getStatusCode() == HttpStatus.OK;
-        assert response.getBody() != null;
-        assert response.getBody().getId() == admin.getId();
+        when(adminService.getAdminById(id)).thenReturn(admin);
+        when(adminService.updateAdmin(id, username, null)).thenReturn(true);
+
+        ResponseEntity<String> response = adminController.updateAdmin(id, username, null);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Admin updated successfully", response.getBody());
+        verify(adminService, times(1)).updateAdmin(id, username, null);
     }
 
     @Test
-    public void givenNonexistentAdmin_whenUpdateAdmin_thenReturnsNotFoundStatus() {
-        Admin admin = new Admin("username", "password");
-        admin.setId(1L);
-        when(adminService.updateAdmin(any(Admin.class))).thenReturn(null);
+    public void givenInvalidId_whenUpdateAdmin_thenReturnNotFound() {
+        Long id = 1L;
 
-        ResponseEntity<Admin> response = adminController.updateAdmin(admin);
+        when(adminService.getAdminById(id)).thenReturn(null);
 
-        verify(adminService, times(1)).updateAdmin(admin);
-        assert response.getStatusCode() == HttpStatus.NOT_FOUND;
+        ResponseEntity<String> response = adminController.updateAdmin(id, null, null);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(adminService, never()).updateAdmin(anyLong(), anyString(), anyString());
     }
+
+    @Test
+    public void givenNoUpdateParametersProvided_whenUpdateAdmin_thenReturnBadRequest() {
+        Long id = 1L;
+
+        Admin admin = new Admin("admin", "password");
+        admin.setId(id);
+
+        when(adminService.getAdminById(id)).thenReturn(admin);
+
+        ResponseEntity<String> response = adminController.updateAdmin(id, null, null);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("No update parameters provided", response.getBody());
+        verify(adminService, never()).updateAdmin(anyLong(), anyString(), anyString());
+    }
+
 
     @Test
     public void givenExistingAdmin_whenDeleteAdmin_thenReturnsNoContentStatus() {

@@ -21,9 +21,16 @@ public class AdminService implements AdminServiceInterface{
         this.adminRepository = adminRepository;
     }
 
-    // Create
-    public Admin saveAdmin(Admin admin) {
-        return adminRepository.save(admin);
+    //Create
+    public boolean createAdmin(String userName, String password){
+        if(userName == null || password == null) return false;
+
+        Admin admin = new Admin();
+        admin.setUserName(userName);
+        admin.setPassword(password);
+
+        adminRepository.saveAndFlush(admin);
+        return true;
     }
 
     // Read
@@ -32,10 +39,19 @@ public class AdminService implements AdminServiceInterface{
     }
 
     // Update
-    public Admin updateAdmin(Admin admin) {
-        return adminRepository.save(admin);
-    }
+    public boolean updateAdmin(long id, String userName, String password) {
+        Optional<Admin> optionalAdmin = adminRepository.findById(id);
+        if (optionalAdmin.isEmpty()) return false;
 
+        Admin admin = optionalAdmin.get();
+
+        if(userName == null && password == null) return false;
+        if (userName != null) admin.setUserName(userName);
+        if (password != null) admin.setPassword(password);
+
+        adminRepository.saveAndFlush(admin);
+        return true;
+    }
     // Delete
     public void deleteAdmin(Long id) {
         adminRepository.deleteById(id);
