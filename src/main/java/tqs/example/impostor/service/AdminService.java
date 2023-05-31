@@ -87,7 +87,7 @@ public class AdminService implements AdminServiceInterface{
     }
 
     public Optional<ACP> searchACPById(Long acpId) {
-        return acpService.searchACPbyID(acpId);
+        return acpService.getACPbyID(acpId);
     }
 
     @Override

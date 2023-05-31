@@ -6,8 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import tqs.example.impostor.repository.ACP;
-import tqs.example.impostor.repository.Admin;
+import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.models.Admin;
 import tqs.example.impostor.service.AdminService;
 
@@ -15,7 +14,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class AdminControllerTest {

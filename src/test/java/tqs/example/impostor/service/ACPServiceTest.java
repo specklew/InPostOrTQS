@@ -68,7 +68,7 @@ public class ACPServiceTest {
         Long id = 1L;
         ACP expectedACP = new ACP();
         when(acpRepository.findById(id)).thenReturn(Optional.of(expectedACP));
-        Optional<ACP> result = acpService.searchACPbyID(id);
+        Optional<ACP> result = acpService.getACPbyID(id);
         assertEquals(Optional.of(expectedACP), result);
     }
 
@@ -76,7 +76,7 @@ public class ACPServiceTest {
     void searchACPbyID_NonExistingID_ReturnsEmptyOptional() {
         Long id = 1L;
         when(acpRepository.findById(id)).thenReturn(Optional.empty());
-        Optional<ACP> result = acpService.searchACPbyID(id);
+        Optional<ACP> result = acpService.getACPbyID(id);
         assertEquals(Optional.empty(), result);
     }
 }
