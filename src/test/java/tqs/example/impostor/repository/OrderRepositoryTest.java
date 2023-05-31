@@ -5,6 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import tqs.example.impostor.models.ACP;
+import tqs.example.impostor.models.Locker;
+import tqs.example.impostor.models.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +44,10 @@ class OrderRepositoryTest {
             acpRepository.saveAndFlush(acp);
         }
 
-        Locker locker0 = new Locker(null, "Locker 1", 10);
+        Locker locker0 = new Locker("Locker 1", 10);
         locker0.setOrders(new ArrayList<>());
 
-        Locker locker1 = new Locker(null, "Locker 2", 20);
+        Locker locker1 = new Locker("Locker 2", 20);
         locker1.setOrders(new ArrayList<>());
 
         lockerList.add(locker0);
@@ -113,9 +116,11 @@ class OrderRepositoryTest {
 
     @Test
     void givenWrongLockerId_whenFindAllByLocker_thenReturnEmptyList() {
-        Locker nonExistingLocker = new Locker(9999L, "Non-existing address", 20);
+        Locker nonExistingLocker = new Locker("Non-existing address", 20);
+        lockerRepository.saveAndFlush(nonExistingLocker);
         assertThat(orderRepository.findAllByLocker(nonExistingLocker)).isEmpty();
     }
+
 
     @Test
     void givenCorrectOwner_whenFindAllByOwner_thenReturnListOfOrders() {

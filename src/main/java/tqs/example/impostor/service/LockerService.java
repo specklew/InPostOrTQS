@@ -1,7 +1,7 @@
 package tqs.example.impostor.service;
 
 import org.springframework.stereotype.Service;
-import tqs.example.impostor.repository.Locker;
+import tqs.example.impostor.models.Locker;
 import tqs.example.impostor.repository.LockerRepository;
 
 import java.util.List;
@@ -33,15 +33,17 @@ public class LockerService {
         return lockerRepository.save(locker);
     }
 
-    public Locker updateLocker(Long id, String newAddress) {
+    public Locker updateLocker(Long id, String newAddress, Integer newCapacity) {
         Optional<Locker> optionalLocker = lockerRepository.findById(id);
         if (optionalLocker.isPresent()) {
             Locker locker = optionalLocker.get();
             locker.setAddress(newAddress);
+            locker.setCapacity(newCapacity);
             return lockerRepository.save(locker);
         }
         return null;
     }
+
 
     public void deleteLocker(Long id) {
         if (!lockerRepository.existsById(id)) {

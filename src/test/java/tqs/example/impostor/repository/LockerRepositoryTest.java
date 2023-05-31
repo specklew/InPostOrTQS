@@ -4,11 +4,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import tqs.example.impostor.models.Locker;
 
 import java.util.Optional;
-
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 
 @DataJpaTest
 public class LockerRepositoryTest {
@@ -17,8 +15,28 @@ public class LockerRepositoryTest {
     private LockerRepository lockerRepository;
 
     @Test
-    public void givenCorrectAddress_whenFindByAddress_thenReturnOptionalOfLocker() {
-        Locker locker = new Locker(null, "Locker 1", 10);
+    public void whenFindLockerByExistingId_thenReturnLocker() {
+        Locker locker = new Locker("Locker 1", 10);
+        lockerRepository.save(locker);
+
+        Optional<Locker> foundLocker = lockerRepository.findById(locker.getId());
+
+        Assertions.assertThat(foundLocker).isPresent();
+        Assertions.assertThat(foundLocker.get().getId()).isEqualTo(locker.getId());
+        Assertions.assertThat(foundLocker.get().getAddress()).isEqualTo(locker.getAddress());
+        Assertions.assertThat(foundLocker.get().getCapacity()).isEqualTo(locker.getCapacity());
+    }
+
+    @Test
+    public void whenFindInvalidLockerId_thenReturnNull() {
+        Optional<Locker> foundLocker = lockerRepository.findById(9999L);
+        Assertions.assertThat(foundLocker).isEmpty();
+    }
+
+    @Test
+    public void givenCorrectAddress_whenFindByAddress_thenReturnLocker() {
+        Locker locker = new Locker("Locker 1", 10);
+      
         lockerRepository.save(locker);
 
         Optional<Locker> foundLocker = lockerRepository.findByAddress("Locker 1");

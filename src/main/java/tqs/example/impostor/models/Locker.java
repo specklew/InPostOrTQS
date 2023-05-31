@@ -1,4 +1,4 @@
-package tqs.example.impostor.repository;
+package tqs.example.impostor.models;
 
 
 import jakarta.persistence.*;
@@ -28,8 +28,7 @@ public class Locker {
 
     }
 
-    public Locker(Long id, String address, int capacity) {
-        this.id = id;
+    public Locker(String address, int capacity) {
         this.address = address;
         this.capacity = capacity;
         this.orders = new ArrayList<>();

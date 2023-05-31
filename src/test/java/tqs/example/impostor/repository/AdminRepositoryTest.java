@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import tqs.example.impostor.models.Admin;
 
 import java.util.Optional;
 
@@ -14,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AdminRepositoryTest {
 
     @Autowired
-
     private AdminRepository adminRepository;
     private Admin testAdmin1;
 

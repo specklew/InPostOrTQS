@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import tqs.example.impostor.repository.Admin;
+import tqs.example.impostor.models.Admin;
 import tqs.example.impostor.repository.AdminRepository;
 import tqs.example.impostor.repository.Order;
 

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import tqs.example.impostor.repository.ACP;
 import tqs.example.impostor.repository.Admin;
+import tqs.example.impostor.models.Admin;
 import tqs.example.impostor.service.AdminService;
 
 import java.util.Optional;

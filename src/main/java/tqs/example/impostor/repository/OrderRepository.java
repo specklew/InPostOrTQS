@@ -2,6 +2,9 @@ package tqs.example.impostor.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import tqs.example.impostor.models.ACP;
+import tqs.example.impostor.models.Locker;
+import tqs.example.impostor.models.Order;
 
 import java.util.List;
 
