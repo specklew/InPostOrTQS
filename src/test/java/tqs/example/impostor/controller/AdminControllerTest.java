@@ -6,10 +6,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import tqs.example.impostor.repository.ACP;
 import tqs.example.impostor.repository.Admin;
 import tqs.example.impostor.service.AdminService;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -171,5 +175,47 @@ class AdminControllerTest {
         assert response.getStatusCode() == HttpStatus.UNAUTHORIZED;
         assert response.getBody() != null;
         assert response.getBody().equals("Invalid credentials");
+    }
+
+    @Test
+    public void givenExistingACPId_whenSearchACPById_thenReturnACP() {
+        Long acpId = 1L;
+        ACP acp = new ACP("Address", 100.0f);
+        acp.setId(acpId);
+        Optional<ACP> optionalACP = Optional.of(acp);
+
+        when(adminService.searchACPById(acpId)).thenReturn(optionalACP);
+
+        ResponseEntity<ACP> response = adminController.searchACPById(acpId);
+
+        verify(adminService, times(1)).searchACPById(acpId);
+        assertSame(acp, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    public void givenNonExistingACPId_whenSearchACPById_thenReturnNotFound() {
+        Long acpId = 1L;
+        Optional<ACP> optionalACP = Optional.empty();
+
+        when(adminService.searchACPById(acpId)).thenReturn(optionalACP);
+
+        ResponseEntity<ACP> response = adminController.searchACPById(acpId);
+
+        verify(adminService, times(1)).searchACPById(acpId);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void givenValidACPParameters_whenAddACP_thenReturnSuccess() {
+        Long acpId = 1L;
+        String address = "Address";
+        float capacity = 100.0f;
+
+        ResponseEntity<String> response = adminController.addACP(acpId, address, capacity);
+
+        verify(adminService, times(1)).addACP(acpId, address, capacity);
+        assertEquals("ACP added successfully", response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }

@@ -76,7 +76,7 @@ public class AdminService implements AdminServiceInterface{
     }
 
 
-    //Functions below are waiting for ACP Service
+    //Function below is waiting for Order Service
     @Override
     public List<Order> getPendingOrders() {
         //TODO

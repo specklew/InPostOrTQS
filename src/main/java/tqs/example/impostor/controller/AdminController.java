@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tqs.example.impostor.repository.ACP;
 import tqs.example.impostor.repository.Admin;
 import tqs.example.impostor.service.AdminService;
 
@@ -80,5 +81,20 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+    @GetMapping("/acp/{id}")
+    public ResponseEntity<ACP> searchACPById(@PathVariable Long id) {
+        Optional<ACP> acp = adminService.searchACPById(id);
+        return acp.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/acp")
+    public ResponseEntity<String> addACP(@RequestParam Long id,
+                                         @RequestParam String address,
+                                         @RequestParam float capacity) {
+        adminService.addACP(id, address, capacity);
+        return ResponseEntity.ok("ACP added successfully");
+    }
+
 
 }
