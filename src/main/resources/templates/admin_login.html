@@ -93,6 +93,40 @@
   <br>
   <p>Don't have an account? <a href="#">Sign Up</a></p>
 </div>
+<script>
+  // JavaScript code
+  document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Get username and password values
+    var username = document.getElementsByName("username")[0].value;
+    var password = document.getElementsByName("password")[0].value;
+
+    // Create a new XMLHttpRequest object
+    var xhr = new XMLHttpRequest();
+
+    // Set up the request
+    xhr.open("POST", "/admin/login", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Set up the callback function
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          // Login successful
+          alert("Login successful");
+          // Redirect to another page or perform any other action
+        } else {
+          // Login failed
+          alert("Invalid credentials");
+        }
+      }
+    };
+
+    // Send the request
+    xhr.send("username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password));
+  });
+</script>
 </body>
 </html>
 
