@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tqs.example.impostor.repository.ACP;
+import tqs.example.impostor.repository.Admin;
 import tqs.example.impostor.models.Admin;
 import tqs.example.impostor.service.AdminService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
@@ -15,10 +19,20 @@ public class AdminController {
     private AdminService adminService;
 
     @PostMapping("/create")
-    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
-        Admin createdAdmin = adminService.saveAdmin(admin);
-        return new ResponseEntity<>(createdAdmin, HttpStatus.CREATED);
+    public ResponseEntity<String> createAdmin(@RequestParam("username") String username,
+                                              @RequestParam("password") String password) {
+        if (username == null || password == null) {
+            return ResponseEntity.badRequest().body("Invalid username or password");
+        }
+
+        boolean created = adminService.createAdmin(username, password);
+        if (created) {
+            return ResponseEntity.ok("Admin created successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create admin");
+        }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Admin> getAdminById(@PathVariable Long id) {
@@ -30,14 +44,21 @@ public class AdminController {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Admin> updateAdmin(@RequestBody Admin admin) {
-        Admin updatedAdmin = adminService.updateAdmin(admin);
-        if (updatedAdmin != null) {
-            return new ResponseEntity<>(updatedAdmin, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateAdmin(@PathVariable Long id,
+                                              @RequestParam(required = false) String username,
+                                              @RequestParam(required = false) String password) {
+        Optional<Admin> optionalAdmin = Optional.ofNullable(adminService.getAdminById(id));
+        if (optionalAdmin.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
+
+        if (username == null && password == null) {
+            return ResponseEntity.badRequest().body("No update parameters provided");
+        }
+
+        adminService.updateAdmin(id, username, password);
+        return ResponseEntity.ok("Admin updated successfully");
     }
 
     @DeleteMapping("/delete/{id}")
@@ -59,5 +80,20 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+    @GetMapping("/acp/{id}")
+    public ResponseEntity<ACP> searchACPById(@PathVariable Long id) {
+        Optional<ACP> acp = adminService.searchACPById(id);
+        return acp.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/acp")
+    public ResponseEntity<String> addACP(@RequestParam Long id,
+                                         @RequestParam String address,
+                                         @RequestParam float capacity) {
+        adminService.addACP(id, address, capacity);
+        return ResponseEntity.ok("ACP added successfully");
+    }
+
 
 }

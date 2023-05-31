@@ -8,37 +8,52 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import tqs.example.impostor.repository.Admin;
 import tqs.example.impostor.models.Admin;
 import tqs.example.impostor.repository.AdminRepository;
+import tqs.example.impostor.repository.Order;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminServiceTests {
 
-    @Mock
+    @Mock(lenient = true)
     private AdminRepository adminRepository;
 
     @InjectMocks
     private AdminService adminService;
 
+    private List<Admin> admins = new ArrayList<>();
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        Admin admin1 = new Admin();
+        admin1.setId(2137L);
+        admin1.setUserName("UserName");
+        admin1.setPassword("Password");
+        admins.add(admin1);
+
+        for (Admin admin : admins) {
+            when(adminRepository.findById(admin.getId())).thenReturn(Optional.of(admin));
+        }
     }
 
     @Test
-    public void givenAdmin_whenSaveAdmin_thenReturnSavedAdmin() {
-        Admin admin = new Admin("username", "password");
-
-        when(adminRepository.save(any(Admin.class))).thenReturn(admin);
-
-        Admin savedAdmin = adminService.saveAdmin(admin);
-
-        Assertions.assertEquals(admin, savedAdmin);
-        verify(adminRepository, times(1)).save(admin);
+    public void givenCorrectData_whenSaveAdmin_thenReturnTrue() {
+        assertThat(adminService.createAdmin("userName", "password")).isTrue();
+    }
+    @Test
+    public void givenWrongData_whenSaveAdmin_thenReturnFalse() {
+        assertThat(adminService.createAdmin(null, null)).isFalse();
     }
 
     @Test
@@ -56,16 +71,13 @@ public class AdminServiceTests {
     }
 
     @Test
-    public void givenAdmin_whenUpdateAdmin_thenReturnUpdatedAdmin() {
-        Admin admin = new Admin("username", "password");
-        admin.setId(1L);
+    public void givenCorrectData_whenUpdateAdmin_thenReturnTrue() {
+        assertThat(adminService.updateAdmin(admins.get(0).getId(), "newUserName", "newPassword")).isTrue();
+    }
 
-        when(adminRepository.save(any(Admin.class))).thenReturn(admin);
-
-        Admin updatedAdmin = adminService.updateAdmin(admin);
-
-        Assertions.assertEquals(admin, updatedAdmin);
-        verify(adminRepository, times(1)).save(admin);
+    @Test
+    public void givenWrongData_whenUpdateAdmin_thenReturnFalse() {
+        assertThat(adminService.updateAdmin(admins.get(0).getId(), null, null)).isFalse();
     }
 
     @Test

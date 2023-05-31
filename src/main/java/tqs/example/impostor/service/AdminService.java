@@ -18,18 +18,22 @@ public class AdminService implements AdminServiceInterface{
     private AdminRepository adminRepository;
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private ACPRepository acpRepository;
+    private ACPService acpService;
 
     public AdminService(AdminRepository adminRepository){
         this.adminRepository = adminRepository;
     }
 
-    // Create
-    public Admin saveAdmin(Admin admin) {
-        return adminRepository.save(admin);
+    //Create
+    public boolean createAdmin(String userName, String password){
+        if(userName == null || password == null) return false;
+
+        Admin admin = new Admin();
+        admin.setUserName(userName);
+        admin.setPassword(password);
+
+        adminRepository.saveAndFlush(admin);
+        return true;
     }
 
     // Read
@@ -38,10 +42,19 @@ public class AdminService implements AdminServiceInterface{
     }
 
     // Update
-    public Admin updateAdmin(Admin admin) {
-        return adminRepository.save(admin);
-    }
+    public boolean updateAdmin(long id, String userName, String password) {
+        Optional<Admin> optionalAdmin = adminRepository.findById(id);
+        if (optionalAdmin.isEmpty()) return false;
 
+        Admin admin = optionalAdmin.get();
+
+        if(userName == null && password == null) return false;
+        if (userName != null) admin.setUserName(userName);
+        if (password != null) admin.setPassword(password);
+
+        adminRepository.saveAndFlush(admin);
+        return true;
+    }
     // Delete
     public void deleteAdmin(Long id) {
         adminRepository.deleteById(id);
@@ -66,21 +79,19 @@ public class AdminService implements AdminServiceInterface{
     }
 
 
-    //Functions below are waiting for ACP Service
+    //Function below is waiting for Order Service
     @Override
     public List<Order> getPendingOrders() {
         //TODO
         return null;
     }
 
-    @Override
-    public ACP searchACPById(String acpId) {
-        //TODO
-        return null;
+    public Optional<ACP> searchACPById(Long acpId) {
+        return acpService.searchACPbyID(acpId);
     }
 
     @Override
-    public void addACP(ACP acp) {
-        //TODO
+    public void addACP(Long id,String address, float capacity) {
+        acpService.createACP(id, address, capacity);
     }
 }
