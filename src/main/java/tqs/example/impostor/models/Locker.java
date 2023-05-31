@@ -1,4 +1,4 @@
-package tqs.example.impostor.repository;
+package tqs.example.impostor.models;
 
 
 import jakarta.persistence.*;

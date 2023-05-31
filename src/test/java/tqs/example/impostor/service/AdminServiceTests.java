@@ -3,18 +3,19 @@ package tqs.example.impostor.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import tqs.example.impostor.repository.Admin;
+import org.mockito.junit.jupiter.MockitoExtension;
+import tqs.example.impostor.models.Admin;
 import tqs.example.impostor.repository.AdminRepository;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class AdminServiceTests {
 
     @Mock

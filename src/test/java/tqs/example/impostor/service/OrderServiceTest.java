@@ -8,9 +8,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import tqs.example.impostor.repository.ACP;
+import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.repository.ACPRepository;
-import tqs.example.impostor.repository.Order;
+import tqs.example.impostor.models.Order;
 import tqs.example.impostor.repository.OrderRepository;
 
 import java.util.ArrayList;

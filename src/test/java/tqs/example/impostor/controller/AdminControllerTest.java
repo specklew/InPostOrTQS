@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import tqs.example.impostor.repository.Admin;
+import tqs.example.impostor.models.Admin;
 import tqs.example.impostor.service.AdminService;
 
 import static org.mockito.ArgumentMatchers.any;
