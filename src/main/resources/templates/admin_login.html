@@ -85,51 +85,59 @@
 <body>
 <div class="login-container">
   <h1>InPostOr Admin Login</h1>
-  <input type="text" name="username" placeholder="Username">
+  <input type="text" id="usernameInput" placeholder="Username">
   <br>
-  <input type="password" name="password" placeholder="Password">
+  <input type="password" id="passwordInput" placeholder="Password">
   <br>
-  <button type="submit">Log In</button>
+  <button id="loginButton" type="submit">Log In</button>
   <br>
   <p>Don't have an account? <a href="#">Sign Up</a></p>
 </div>
 <script>
   // JavaScript code
-  document.getElementById("loginForm").addEventListener("submit", function(event) {
+  document.getElementById("loginButton").addEventListener("click", function(event) {
     event.preventDefault(); // Prevent form submission
 
     // Get username and password values
-    var username = document.getElementsByName("username")[0].value;
-    var password = document.getElementsByName("password")[0].value;
+    var enteredUsername = document.getElementById("usernameInput").value;
+    var enteredPassword = document.getElementById("passwordInput").value;
 
-    // Create a new XMLHttpRequest object
-    var xhr = new XMLHttpRequest();
+    // Compare with the hardcoded credentials
+    var correctUsername = "inpost";
+    var correctPassword = "tqs123";
 
-    // Set up the request
-    xhr.open("POST", "/admin/login", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    if (enteredUsername === correctUsername && enteredPassword === correctPassword) {
+      // Create a new XMLHttpRequest object
+      var xhr = new XMLHttpRequest();
 
-    // Set up the callback function
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          // Login successful
-          alert("Login successful");
-          // Redirect to another page or perform any other action
-        } else {
-          // Login failed
-          alert("Invalid credentials");
+      // Set up the request
+      xhr.open("POST", "/admin/login", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      // Set up the callback function
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            // Login successful
+            alert("Login successful");
+            window.location.href = "acp.html"; // Redirect to acp.html
+          } else {
+            // Login failed
+            alert("Invalid credentials");
+          }
         }
-      }
-    };
+      };
 
-    // Send the request
-    xhr.send("username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password));
+      // Send the request
+      xhr.send("username=" + encodeURIComponent(enteredUsername) + "&password=" + encodeURIComponent(enteredPassword));
+    } else {
+      // Incorrect credentials
+      alert("Invalid credentials");
+    }
   });
 </script>
 </body>
 </html>
-
 
 
 
