@@ -27,7 +27,7 @@ public class OrderController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Order> readOrderById(@PathVariable("id") Long id){
+    public ResponseEntity<Order> readOrderById(@PathVariable("id") long id){
         return ResponseEntity.ok(orderService.readOrder(id));
     }
 
@@ -56,5 +56,18 @@ public class OrderController {
         return ResponseEntity.ok(orderService.readOrdersByDeliverer(deliverer));
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<Boolean> updateOrder(
+            @RequestParam long id,
+            @RequestParam String acpAddress,
+            @RequestParam String shopName,
+            @RequestParam String owner,
+            @RequestParam String deliverer){
+        return ResponseEntity.ok(orderService.updateOrder(id, acpAddress, shopName, owner, deliverer));
+    }
 
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteOrder(@PathVariable("id") long id){
+        return ResponseEntity.ok(orderService.deleteOrder(id));
+    }
 }
