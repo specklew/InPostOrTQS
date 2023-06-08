@@ -68,12 +68,16 @@ public class OrderService {
      */
     public List<Order> readOrdersByACPAddress(String acpAddress){
         Optional<ACP> acp = acpRepository.findByAddress(acpAddress);
-        return acp.map(value -> orderRepository.findAllByAcp(value)).orElse(null);
+        return acp.map(orderRepository::findAllByAcp).orElse(null);
     }
 
+    /**
+     * @param lockerAddress The address of the Locker that the orders are sent to.
+     * @return - List of orders that were sent to that Locker.
+     */
     public List<Order> readOrdersByLockerAddress(String lockerAddress){
         Optional<Locker> locker = lockerRepository.findByAddress(lockerAddress);
-        return locker.map(value -> orderRepository.findAllByLocker(value)).orElse(null);
+        return locker.map(orderRepository::findAllByLocker).orElse(null);
     }
 
     /**

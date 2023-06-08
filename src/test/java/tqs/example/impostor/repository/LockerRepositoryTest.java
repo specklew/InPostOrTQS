@@ -15,7 +15,7 @@ public class LockerRepositoryTest {
     private LockerRepository lockerRepository;
 
     @Test
-    public void whenFindLockerByExistingId_thenReturnLocker() {
+    void whenFindLockerByExistingId_thenReturnLocker() {
         Locker locker = new Locker("Locker 1", 10);
         lockerRepository.save(locker);
 
@@ -28,13 +28,13 @@ public class LockerRepositoryTest {
     }
 
     @Test
-    public void whenFindInvalidLockerId_thenReturnNull() {
+    void whenFindInvalidLockerId_thenReturnNull() {
         Optional<Locker> foundLocker = lockerRepository.findById(9999L);
         Assertions.assertThat(foundLocker).isEmpty();
     }
 
     @Test
-    public void givenCorrectAddress_whenFindByAddress_thenReturnLocker() {
+    void givenCorrectAddress_whenFindByAddress_thenReturnLocker() {
         Locker locker = new Locker("Locker 1", 10);
       
         lockerRepository.save(locker);
@@ -48,7 +48,7 @@ public class LockerRepositoryTest {
     }
 
     @Test
-    public void givenWrongAddress_whenFindByAddress_thenReturnEmpty() {
+    void givenWrongAddress_whenFindByAddress_thenReturnEmpty() {
         Optional<Locker> lockerFound = lockerRepository.findByAddress("Non-existent locker");
         Assertions.assertThat(lockerFound).isEmpty();
     }

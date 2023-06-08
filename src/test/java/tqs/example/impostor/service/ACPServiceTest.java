@@ -2,17 +2,20 @@ package tqs.example.impostor.service;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.example.impostor.models.ACP;
+import tqs.example.impostor.models.Order;
 import tqs.example.impostor.repository.ACPRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 public class ACPServiceTest {
     @Mock
@@ -68,7 +71,7 @@ public class ACPServiceTest {
         Long id = 1L;
         ACP expectedACP = new ACP();
         when(acpRepository.findById(id)).thenReturn(Optional.of(expectedACP));
-        Optional<ACP> result = acpService.getACPbyID(id);
+        Optional<ACP> result = acpService.getACPById(id);
         assertEquals(Optional.of(expectedACP), result);
     }
 
@@ -76,7 +79,62 @@ public class ACPServiceTest {
     void searchACPbyID_NonExistingID_ReturnsEmptyOptional() {
         Long id = 1L;
         when(acpRepository.findById(id)).thenReturn(Optional.empty());
-        Optional<ACP> result = acpService.getACPbyID(id);
+        Optional<ACP> result = acpService.getACPById(id);
         assertEquals(Optional.empty(), result);
+    }
+
+    @Test
+    void whenGetAllACPs_thenReturnListOfACPs() {
+        ACP acp = new ACP();
+
+        List<ACP> acpList = new ArrayList<>();
+        acpList.add(acp);
+
+        when(acpRepository.findAll()).thenReturn(acpList);
+
+        assertEquals(acpService.getAllACPs(), acpList);
+    }
+
+    @Test
+    void givenAddress_whenGetACPByAddress_thenReturnACP() {
+        ACP acp = new ACP();
+
+        when(acpRepository.findByAddress(Mockito.any())).thenReturn(Optional.of(acp));
+
+        assertEquals(acpService.getACPByAddress("add"), Optional.of(acp));
+    }
+
+    @Test
+    void givenNewParameters_whenUpdateACP_thenReturnTrue() {
+        Long id = 1L;
+        ACP expectedACP = new ACP();
+        when(acpRepository.findById(id)).thenReturn(Optional.of(expectedACP));
+
+        Set<Order> orderSet = new HashSet<>();
+
+        assertTrue(acpService.updateACP(id, "add", 1f, orderSet));
+    }
+
+    @Test
+    void givenAcceptableNullParameters_whenUpdateACP_thenReturnTrue() {
+        Long id = 1L;
+        ACP expectedACP = new ACP();
+        when(acpRepository.findById(id)).thenReturn(Optional.of(expectedACP));
+
+        assertTrue(acpService.updateACP(id, null, -1f, null));
+    }
+
+    @Test
+    void givenACPId_whenDeleteACP_thenReturnTrue() {
+        long id = 1L;
+        when(acpRepository.existsById(id)).thenReturn(true);
+
+        assertTrue(acpService.deleteACP(id));
+    }
+
+    @Test
+    void givenWrongId_whenDeleteACP_thenReturnFalse() {
+        when(acpRepository.existsById(Mockito.any())).thenReturn(false);
+        assertFalse(acpService.deleteACP(15L));
     }
 }

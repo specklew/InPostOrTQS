@@ -9,8 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.example.impostor.models.ACP;
+import tqs.example.impostor.models.Locker;
 import tqs.example.impostor.repository.ACPRepository;
 import tqs.example.impostor.models.Order;
+import tqs.example.impostor.repository.LockerRepository;
 import tqs.example.impostor.repository.OrderRepository;
 
 import java.util.ArrayList;
@@ -31,11 +33,14 @@ class OrderServiceTest {
     private OrderRepository orderRepository;
     @Mock(lenient = true)
     private ACPRepository acpRepository;
+    @Mock(lenient = true)
+    private LockerRepository lockerRepository;
 
     @InjectMocks
     private OrderService service;
 
     private ACP acp;
+    private Locker locker;
     private List<Order> orders = new ArrayList<>();
 
     @BeforeEach
@@ -44,12 +49,17 @@ class OrderServiceTest {
         acp.setAddress("addr");
         acp.setCapacity(0.5f);
 
+        locker = new Locker();
+        locker.setAddress("lock");
+        locker.setCapacity(10);
+
         Order order1 = new Order();
         order1.setId(1L);
         order1.setAcp(acp);
         order1.setOwner("owner1");
         order1.setShopName("shopName1");
         order1.setDeliverer("deliverer1");
+        order1.setLocker(locker);
         orders.add(order1);
 
         Order order2 = new Order();
@@ -58,6 +68,7 @@ class OrderServiceTest {
         order2.setOwner("owner2");
         order2.setShopName("shopName2");
         order2.setDeliverer("deliverer2");
+        order2.setLocker(locker);
         orders.add(order2);
 
         Order order3 = new Order();
@@ -66,10 +77,13 @@ class OrderServiceTest {
         order3.setOwner("owner1");
         order3.setShopName("shopName1");
         order3.setDeliverer("deliverer2");
+        order3.setLocker(locker);
         orders.add(order3);
 
         when(acpRepository.findByAddress(acp.getAddress())).thenReturn(Optional.of(acp));
         when(acpRepository.findByAddress("wrong")).thenReturn(Optional.empty());
+        when(lockerRepository.findByAddress(locker.getAddress())).thenReturn(Optional.of(locker));
+        when(lockerRepository.findByAddress("wrong")).thenReturn(Optional.empty());
 
         for(Order order : orders){
             when(orderRepository.findById(order.getId())).thenReturn(Optional.of(order));
@@ -77,6 +91,7 @@ class OrderServiceTest {
         }
 
         when(orderRepository.findAllByAcp(acp)).thenReturn(orders);
+        when(orderRepository.findAllByLocker(locker)).thenReturn(orders);
         when(orderRepository.findAllByOwner("owner1")).thenReturn(List.of(order1, order3));
         when(orderRepository.findAllByOwner("owner2")).thenReturn(List.of(order2));
         when(orderRepository.findAllByShopName("shopName1")).thenReturn(List.of(order1, order3));
@@ -114,6 +129,16 @@ class OrderServiceTest {
     @Test
     void givenWrongACPAddress_whenReadOrdersByACPAddress_thenReturnEmptyList() {
         assertThat(service.readOrdersByACPAddress("wrong")).isNull();
+    }
+
+    @Test
+    void givenLockerAddress_whenReadOrdersByLockerAddress_thenReturnListOfOrders() {
+        assertThat(service.readOrdersByLockerAddress(locker.getAddress())).isEqualTo(orders);
+    }
+
+    @Test
+    void givenWrongLockerAddress_whenReadOrdersByLockerAddress_thenReturnEmptyList() {
+        assertThat(service.readOrdersByLockerAddress("wrong")).isNull();
     }
 
     @ParameterizedTest
@@ -184,9 +209,9 @@ class OrderServiceTest {
         assertThat(service.updateOrder(
                 orders.get(0).getId(),
                 acp.getAddress(),
-                null,
-                null,
-                null)).isTrue();
+                "name",
+                "own",
+                "deli")).isTrue();
     }
 
     @Test
@@ -207,6 +232,16 @@ class OrderServiceTest {
                 null,
                 null,
                 null)).isFalse();
+    }
+
+    @Test
+    void givenAcceptableNullData_whenUpdateOrder_thenReturnTrue() {
+        assertThat(service.updateOrder(
+                orders.get(0).getId(),
+                null,
+                null,
+                null,
+                null)).isTrue();
     }
 
     @Test
