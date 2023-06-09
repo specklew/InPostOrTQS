@@ -1,5 +1,7 @@
 package tqs.example.impostor.proofofconcept.eshop;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,17 +9,18 @@ import org.json.simple.parser.ParseException;
 import tqs.example.impostor.proofofconcept.BasicHttpClient;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EShopHttpRequester {
 
-    BasicHttpClient httpClient = new BasicHttpClient();
-
-    private static final int API_SUCCESS = 200;
+    private final BasicHttpClient httpClient = new BasicHttpClient();
+    private final String websiteAddress = "http://localhost:8080";
 
     public List<String> getAcpAddressesFromRemoteServer() throws IOException, ParseException {
-        String response = httpClient.doHttpGet("http://localhost:8080/acp/get/all");
+        String response = httpClient.doHttpGet(websiteAddress + "/acp/get/all");
 
         JSONArray acpJsonArray = (JSONArray) new JSONParser().parse(response);
 
@@ -29,5 +32,16 @@ public class EShopHttpRequester {
         }
 
         return result;
+    }
+
+    public boolean postNewOrder(String address, String shop, String owner, String deliverer) throws IOException, URISyntaxException, ParseException {
+        List<NameValuePair> parameters = new ArrayList<>();
+        parameters.add(new BasicNameValuePair("acpAddress", address));
+        parameters.add(new BasicNameValuePair("shopName", shop));
+        parameters.add(new BasicNameValuePair("owner", owner));
+        parameters.add(new BasicNameValuePair("deliverer", deliverer));
+        String response = httpClient.doHttpPost(websiteAddress + "/order/create", parameters);
+
+        return Objects.equals(response, "true");
     }
 }

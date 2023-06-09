@@ -4,9 +4,12 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 @Controller
 @RequestMapping("/poc/eshop")
@@ -23,5 +26,16 @@ public class EShopController {
 
         model.addAttribute("acpList", httpRequester.getAcpAddressesFromRemoteServer());
         return "eshop/cart";
+    }
+
+    @PostMapping("order")
+    public String order(Model model, @RequestParam String address, @RequestParam String owner) throws IOException, URISyntaxException, ParseException {
+
+        EShopHttpRequester httpRequester = new EShopHttpRequester();
+        boolean result = httpRequester.postNewOrder(address, "pokeShop", owner, "FedUp");
+
+        model.addAttribute("postResult" ,result);
+
+        return "eshop/order";
     }
 }
