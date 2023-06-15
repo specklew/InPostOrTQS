@@ -27,13 +27,20 @@ public class AdminService implements AdminServiceInterface{
     //Create
     public boolean createAdmin(String userName, String password){
         if(userName == null || password == null) return false;
-
+        if(adminRepository.findByUserName(userName).isPresent()) return false;
         Admin admin = new Admin();
         admin.setUserName(userName);
         admin.setPassword(password);
 
         adminRepository.saveAndFlush(admin);
         return true;
+    }
+
+    public void createAdminProgrammatically() {
+        String username = "dummy";
+        String password = "password";
+
+        createAdmin(username, password);
     }
 
     // Read
