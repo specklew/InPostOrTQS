@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
 import tqs.example.impostor.proofofconcept.BasicHttpClient;
 
 import java.io.IOException;
@@ -14,10 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Service
 public class EShopHttpRequester {
 
-    private final BasicHttpClient httpClient = new BasicHttpClient();
+    private final BasicHttpClient httpClient;
     private final String websiteAddress = "http://localhost:8080";
+
+    public EShopHttpRequester() {
+        this.httpClient = new BasicHttpClient();
+    }
+
+    public EShopHttpRequester(BasicHttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
 
     public List<String> getAcpAddressesFromRemoteServer() throws IOException, ParseException {
         String response = httpClient.doHttpGet(websiteAddress + "/acp/get/all");

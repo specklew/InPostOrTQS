@@ -1,22 +1,26 @@
 package tqs.example.impostor.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "ORDERS")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "acp_id", nullable = true)
+    @ManyToOne
+    @JoinColumn(name = "acp_id", nullable = false)
     private ACP acp;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "locker_id", nullable = true)
+    @ManyToOne
+    @JoinColumn(name = "locker_id")
     private Locker locker;
 
     @Column(nullable = false)
