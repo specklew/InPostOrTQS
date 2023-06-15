@@ -19,7 +19,7 @@ public class ACPController {
         this.acpService = acpService;
     }
 
-    @GetMapping
+    @GetMapping("/get/all")
     public ResponseEntity<List<ACP>> getAllACPs() {
         List<ACP> acps = acpService.getAllACPs();
         return ResponseEntity.ok(acps);

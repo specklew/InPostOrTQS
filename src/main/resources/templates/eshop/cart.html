@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>eShop Pokémon</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  </head>
+  <body>
+  <!-- Navbar -->
+  <nav class="navbar has-shadow" role="navigation">
+
+    <div class="navbar-brand">
+      <a class="navbar-item">PokeShop</a>
+    </div>
+
+    <!-- Navbar menu -->
+    <div class="navbar-menu">
+
+      <!-- Navbar start - meaning that this will be at the beginning -->
+      <div class="navbar-start">
+
+        <div class="navbar-item">
+          <div class="field">
+            <p class="control">
+              <a href="/poc/eshop" class="button">
+                <span class="icon">
+                  <ion-icon name="albums-outline"></ion-icon>
+                </span>
+                <span>Browse</span>
+              </a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Things at the end of the navbar -->
+      <div class="navbar-end">
+
+        <div class="navbar-item">
+          <div class="field">
+            <p class="control">
+              <a href="/poc/eshop/cart" class="button">
+                <span class="icon">
+                  <ion-icon name="cart-outline"></ion-icon>
+                </span>
+                <span>My cart</span>
+              </a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="p-5">
+    <div class="container">
+      <section class="hero pb-6">
+        <h1 class="title">Order</h1>
+        <p class="subtitle">Done shopping? Good! Now it's time to order!</p>
+      </section>
+      <form method="post" action="/poc/eshop/order" class="columns is-8">
+
+        <div class="column">
+
+          <div class="content">
+            <h3>Personal information</h3>
+          </div>
+          <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+              <input th:name="owner" class="input" type="text" placeholder="Put your name here">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Surname</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Put your surname here">
+            </div>
+          </div>
+
+
+        </div>
+        <div class="column">
+
+          <div class="content">
+            <h3>Delivery</h3>
+          </div>
+          <div class="field">
+            <label for="acpSelect" class="label">Location of the drop-off point</label>
+            <div class="select is-fullwidth">
+              <select th:name="address" id="acpSelect" name="acpSelect">
+                <option th:each="acp : ${acpList}"
+                        th:text="${acp}"
+                        th:value="${acp}"></option>
+                <option>lol</option>
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <button type="submit" class="button is-primary">Order</button>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  </body>
+</html>

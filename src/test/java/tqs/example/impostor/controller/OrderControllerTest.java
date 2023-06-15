@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import tqs.example.impostor.models.ACP;
@@ -20,15 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
@@ -111,8 +109,7 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.shopName", is(orders.get(id).getShopName())))
                 .andExpect(jsonPath("$.acp.address", is(orders.get(id).getAcp().getAddress())))
                 .andExpect(jsonPath("$.owner", is(orders.get(id).getOwner())))
-                .andExpect(jsonPath("$.deliverer", is(orders.get(id).getDeliverer())))
-                .andDo(print());
+                .andExpect(jsonPath("$.deliverer", is(orders.get(id).getDeliverer())));
     }
 
     @ParameterizedTest
