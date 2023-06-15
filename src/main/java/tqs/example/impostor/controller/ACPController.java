@@ -4,12 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tqs.example.impostor.models.ACP;
-import tqs.example.impostor.models.Order;
 import tqs.example.impostor.service.ACPService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/acp")
@@ -27,7 +25,7 @@ public class ACPController {
         return ResponseEntity.ok(acps);
     }
 
-    @GetMapping("/search/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ACP> getACPById(@PathVariable("id") Long id) {
         Optional<ACP> acp = acpService.getACPById(id);
         return acp.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -41,7 +39,7 @@ public class ACPController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createACP(@RequestParam Long id, @RequestParam String address, @RequestParam float capacity) {
+    public ResponseEntity<Void> createACP(@RequestParam Long id, @RequestParam String address, @RequestParam Float capacity) {
         boolean created = acpService.createACP(id, address, capacity);
         if (created) {
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -51,23 +49,19 @@ public class ACPController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateACP(@PathVariable Long id, @RequestParam(required = false) String address, @RequestParam(required = false) Float capacity, @RequestParam(required = false) Set<Order> orders) {
-        boolean updated = acpService.updateACP(id, address, capacity, orders);
-        if (updated) {
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> updateACP(@PathVariable Long id, @RequestParam(required = false) String address, @RequestParam(required = false) Float capacity) {
+        Optional<ACP> optionalACP = acpService.getACPById(id);
+        if (optionalACP.isPresent()) {
+            boolean updatedACP = acpService.updateACP(id, address, capacity);
+            return ResponseEntity.ok(updatedACP);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteACP(@PathVariable Long id) {
-        boolean deleted = acpService.deleteACP(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Boolean> deleteACP(@PathVariable("id") long id) {
+        return ResponseEntity.ok(acpService.deleteACP(id));
     }
 }
 

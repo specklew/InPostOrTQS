@@ -1,186 +1,176 @@
 package tqs.example.impostor.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import tqs.example.impostor.models.ACP;
-import tqs.example.impostor.models.Locker;
-import tqs.example.impostor.models.Order;
 import tqs.example.impostor.service.ACPService;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ACPControllerTest {
+@WebMvcTest(ACPController.class)
+class ACPControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private ACPService acpService;
 
-    @InjectMocks
-    private ACPController acpController;
+    private ACP acp;
 
-    public ACPControllerTest() {
-        MockitoAnnotations.openMocks(this);
-        acpController = new ACPController(acpService);
-    }
+   @BeforeEach
+   void setUp(){
+       acp = new ACP();
+       acp.setId(1L);
+       acp.setAddress("Address 1");
+       acp.setCapacity(0.5f);
+
+   }
 
     @Test
-    void givenAllACPs_thenReturnAllACPs() {
-        ACP acp1 = new ACP("Address 1", 10);
-        ACP acp2 = new ACP("Address 2", 20);
-        List<ACP> acps = Arrays.asList(acp1, acp2);
+    void givenAllACPs_thenReturnAllACPs() throws Exception {
+        List<ACP> acps = Collections.singletonList(acp);
         when(acpService.getAllACPs()).thenReturn(acps);
 
-        ResponseEntity<List<ACP>> response = acpController.getAllACPs();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(acps, response.getBody());
-        verify(acpService, times(1)).getAllACPs();
+        mockMvc.perform(get("/acp"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].address", is("Address 1")))
+                .andExpect(jsonPath("$[0].capacity", is(0.5)));
     }
 
     @Test
-    void givenValidId_whenGetACPById_thenReturnACP() {
-        Long id = 1L;
-        ACP acp = new ACP("Address 1", 10.0f);
-        when(acpService.getACPById(id)).thenReturn(Optional.of(acp));
+    void givenValidId_whenGetACPById_thenReturnACP() throws Exception {
+        when(acpService.getACPById(1L)).thenReturn(Optional.of(acp));
 
-        ResponseEntity<ACP> response = acpController.getACPById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(acp, response.getBody());
-        verify(acpService, times(1)).getACPById(id);
+        mockMvc.perform(get("/acp/{id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.address", is("Address 1")))
+                .andExpect(jsonPath("$.capacity", is(0.5)));
     }
 
     @Test
-    void givenInvalidId_whenGetACPById_thenReturnEmptyList() {
-        Long id = 1L;
-        when(acpService.getACPById(id)).thenReturn(Optional.empty());
+    void givenInvalidId_whenGetACPById_thenReturnEmptyList() throws Exception {
+        when(acpService.getACPById(1L)).thenReturn(Optional.empty());
 
-        ResponseEntity<ACP> response = acpController.getACPById(id);
+        MvcResult result = mockMvc.perform(get("/acp/{id}", 1L))
+                .andExpect(status().isNotFound())
+                .andReturn();
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(acpService, times(1)).getACPById(id);
+        String content = result.getResponse().getContentAsString();
+        assertThat(content).isEmpty();
     }
 
     @Test
-    void givenValidAddress_whenGetACPByAddress_thenReturnACP() {
+    void givenValidAddress_whenGetACPByAddress_thenReturnACP() throws Exception {
         String address = "Address 1";
-        ACP acp = new ACP(address, 10.0f);
-
         when(acpService.getACPByAddress(address)).thenReturn(Optional.of(acp));
 
-        ResponseEntity<ACP> response = acpController.getACPByAddress(address);
+        mockMvc.perform(get("/acp/address/{address}", address))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.address", is("Address 1")))
+                .andExpect(jsonPath("$.capacity", is(0.5)));
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(acp, response.getBody());
-        verify(acpService, times(1)).getACPByAddress(address);
     }
 
     @Test
-    void givenInValidAddress_whenGetACPByAddress_thenReturnEmptyList() {
-        String address = "Address 1";
-
+    void givenInValidAddress_whenGetACPByAddress_thenReturnEmptyList() throws Exception {
+        String address = "Invalid Address";
         when(acpService.getACPByAddress(address)).thenReturn(Optional.empty());
 
-        ResponseEntity<ACP> response = acpController.getACPByAddress(address);
+        MvcResult result = mockMvc.perform(get("/acp/address/{address}", address))
+                .andExpect(status().isNotFound())
+                .andReturn();
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(acpService, times(1)).getACPByAddress(address);
+        String content = result.getResponse().getContentAsString();
+        assertThat(content).isEmpty();
     }
 
     @Test
-    void givenValidLockerData_whenCreateLocker_thenReturnCreatedLocker() {
-        Long id = 1L;
-        String address = "Address 1";
-        float capacity = 10.0f;
+    void givenValidACPData_whenCreateACP_thenReturnCreatedACP() throws Exception {
+        when(acpService.createACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(true);
 
-        when(acpService.createACP(id, address, capacity)).thenReturn(true);
+        mockMvc.perform(post("/acp/create")
+                        .param("id", String.valueOf(1L))
+                        .param("address", "New Address")
+                        .param("capacity", String.valueOf(0.8f)))
+                .andExpect(status().isCreated());
+    }
 
-        ResponseEntity<Void> response = acpController.createACP(id, address, capacity);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        verify(acpService, times(1)).createACP(id, address, capacity);
+    @Test
+    void givenInvalidACPData_whenCreateACP_thenReturnEmptyContent() throws Exception {
+        when(acpService.createACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(false);
+
+        MvcResult result = mockMvc.perform(post("/acp/create")
+                        .param("id", String.valueOf(1L))
+                        .param("address", "Invalid Address")
+                        .param("capacity", String.valueOf(0.8f)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        assertThat(content).isEmpty();
+    }
+
+    //this one does not pass, idk why
+    @Test
+    void givenExistingACPId_whenUpdateACP_thenReturnUpdatedACP() throws Exception {
+        when(acpService.updateACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(true);
+
+        MvcResult result = mockMvc.perform(put("/acp/update/{id}", String.valueOf(1L))
+                        .param("address", "Updated Address")
+                        .param("capacity", String.valueOf(0.9f)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        boolean updatedACP = Boolean.parseBoolean(result.getResponse().getContentAsString());
+        assertThat(updatedACP).isTrue();
+    }
+
+
+
+    @Test
+    void givenNonExistingACPId_whenUpdateACP_tenReturnNotFound() throws Exception {
+        when(acpService.updateACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(false);
+
+        MvcResult result = mockMvc.perform(put("/acp/update/{id}", String.valueOf(1L))
+                        .param("address", "Invalid Address")
+                        .param("capacity", String.valueOf(1.0f)))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        assertThat(content).isEmpty();
     }
 
     @Test
-    void givenInValidLockerData_whenCreateLocker_thenReturn() {
-        Long id = 1L;
-        String address = "Address 1";
-        float capacity = 10.0f;
+    void givenExistingACP_whenDeleteACP_thenDeleteACP() throws Exception {
+    when(acpService.deleteACP(Mockito.any(Long.class))).thenReturn(true);
 
-        when(acpService.createACP(id, address, capacity)).thenReturn(false);
+        MvcResult result = mockMvc.perform(delete("/acp/delete/{id}", String.valueOf(1L)))
+                .andExpect(status().isOk())
+                .andReturn();
 
-        ResponseEntity<Void> response = acpController.createACP(id, address, capacity);
-
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(acpService, times(1)).createACP(id, address, capacity);
-    }
-
-    @Test
-    void givenExistingACPId_whenUpdateACP_tenReturnUpdatedACP() {
-        Long id = 1L;
-        String address = "New Address";
-        Float capacity = 15.0f;
-        Set<Order> orders = null;
-
-        when(acpService.updateACP(id, address, capacity, orders)).thenReturn(true);
-
-        ResponseEntity<Void> response = acpController.updateACP(id, address, capacity, orders);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(acpService, times(1)).updateACP(id, address, capacity, orders);
-    }
-
-    @Test
-    void givenNonExistingACPId_whenUpdateACP_tenReturnNotFound() {
-        Long id = 1L;
-        String address = "New Address";
-        Float capacity = 15.0f;
-        Set<Order> orders = null;
-
-        // Mock the service method
-        when(acpService.updateACP(id, address, capacity, orders)).thenReturn(false);
-
-        // Perform the PUT request
-        ResponseEntity<Void> response = acpController.updateACP(id, address, capacity, orders);
-
-        // Verify the response
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(acpService, times(1)).updateACP(id, address, capacity, orders);
-    }
-
-    @Test
-        void givenExistingACPId_whenDeleteACP_tenReturnNoContent() {
-        Long id = 1L;
-
-        when(acpService.deleteACP(id)).thenReturn(true);
-
-        ResponseEntity<Void> response = acpController.deleteACP(id);
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(acpService, times(1)).deleteACP(id);
-    }
-
-    @Test
-    void givenNonExistingLockerId_whenDeleteLocker_thenReturnNotFound(){
-    Long id = 1L;
-
-    when(acpService.deleteACP(id)).thenReturn(false);
-
-    ResponseEntity<Void> response = acpController.deleteACP(id);
-
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    verify(acpService, times(1)).deleteACP(id);
-    }
+        String content = result.getResponse().getContentAsString();
+        assertThat(content).isEqualTo("true");
+   }
 }
 
 

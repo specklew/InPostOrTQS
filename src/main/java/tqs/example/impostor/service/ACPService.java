@@ -3,7 +3,6 @@ package tqs.example.impostor.service;
 import org.springframework.stereotype.Service;
 import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.repository.ACPRepository;
-import tqs.example.impostor.models.Order;
 
 import java.util.*;
 
@@ -28,44 +27,42 @@ public class ACPService {
         if (address == null || capacity == 0) {
             return false;
         }
-        ACP acp = new ACP();
-        //Set<Order> orders;
-        if (!acpRepository.existsById(id)) {
-            acp.setOrders(null);
-            acp.setId(id);
-            acp.setAddress(address);
-            acp.setCapacity(capacity);
-        } else {
+
+        if (acpRepository.existsById(id)) {
             return false;
         }
 
-        return true;
+        ACP acp = new ACP();
+        acp.setId(id);
+        acp.setAddress(address);
+        acp.setCapacity(capacity);
 
+        acpRepository.save(acp);
+
+        return acpRepository.existsById(id);
     }
 
     public Optional<ACP> getACPById(Long id) {
-        Optional<ACP> acp = acpRepository.findById(id);
-        return Optional.ofNullable(acp.orElse(null));
+        return acpRepository.findById(id);
     }
 
 
-    public boolean updateACP(Long id, String address, float capacity, Set<Order> order) {
-        Optional<ACP> acp = acpRepository.findById(id);
-        // What does s stand for my dude? I get that it's a temp variable but come on.
-        // Also getting an optional without checking isEmpty is just bad. You should probably return false is optional
-        // is empty. @maciek
-        ACP s = acp.get();
-        if (address != null) {
-            s.setAddress(address);
+    public boolean updateACP(Long id, String address, float capacity) {
+        Optional<ACP> acpOptional = acpRepository.findById(id);
+        // poprawione according to maciek's remarks @malwina
+        if (acpOptional.isPresent()) {
+            ACP acp = acpOptional.get();
+            if (address != null) {
+                acp.setAddress(address);
+            }
+            if (capacity >= 0) {
+                acp.setCapacity(capacity);
+            }
+            acpRepository.saveAndFlush(acp);
+            return true;
+        } else {
+            return false; // when ACP with specified ID does not exist
         }
-        if (capacity >= 0) {
-            s.setCapacity(capacity);
-        }
-        if (order != null) {
-            s.setOrders(order); // The naming here is confusing since you're not updating order but orders
-        }
-        acpRepository.saveAndFlush(s);
-        return true;
     }
 
     public boolean deleteACP(long id) {
@@ -73,6 +70,4 @@ public class ACPService {
         acpRepository.deleteById(id);
         return true;
     }
-
-
 }

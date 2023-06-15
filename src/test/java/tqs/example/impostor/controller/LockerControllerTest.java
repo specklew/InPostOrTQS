@@ -1,11 +1,12 @@
 package tqs.example.impostor.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 import tqs.example.impostor.models.Locker;
 import tqs.example.impostor.service.LockerService;
 
@@ -13,126 +14,116 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(LockerController.class)
 class LockerControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+    @MockBean
     private LockerService lockerService;
 
-    @InjectMocks
-    private LockerController lockerController;
+    private Locker locker;
 
-    public LockerControllerTest() {
-        MockitoAnnotations.openMocks(this);
-        lockerController = new LockerController(lockerService);
+    @BeforeEach
+    public void setup() {
+        locker = new Locker();
+        locker.setId(1L);
+        locker.setAddress("Address 1");
+        locker.setCapacity(10);
     }
 
     @Test
-    void givenAllLockers_thenReturnAllLockers() {
-        Locker locker1 = new Locker("Address 1", 10);
-        Locker locker2 = new Locker("Address 2", 20);
-        List<Locker> lockers = Arrays.asList(locker1, locker2);
+    void givenAllLockers_thenReturnAllLockers() throws Exception {
+        List<Locker> lockers = Arrays.asList(locker);
+
         when(lockerService.getAllLockers()).thenReturn(lockers);
 
-        ResponseEntity<List<Locker>> response = lockerController.getAllLockers();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(lockers, response.getBody());
-        verify(lockerService, times(1)).getAllLockers();
+        mockMvc.perform(get("/locker"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].address", is("Address 1")))
+                .andExpect(jsonPath("$[0].capacity", is(10)));
     }
 
     @Test
-    void givenValidId_whenGetLockerById_thenReturnLocker() {
-        Long id = 1L;
-        Locker locker = new Locker("Address 1", 10);
-        when(lockerService.getLockerById(id)).thenReturn(Optional.of(locker));
+    void givenValidId_whenGetLockerById_thenReturnLocker() throws Exception {
+        when(lockerService.getLockerById(1L)).thenReturn(Optional.of(locker));
 
-        ResponseEntity<Locker> response = lockerController.getLockerById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(locker, response.getBody());
-        verify(lockerService, times(1)).getLockerById(id);
+        mockMvc.perform(get("/locker/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.address", is("Address 1")))
+                .andExpect(jsonPath("$.capacity", is(10)));
     }
 
     @Test
-    void givenInvalidId_whenGetLockerById_thenReturnEmptyList() {
-        Long id = 1L;
-        when(lockerService.getLockerById(id)).thenReturn(Optional.empty());
+    void givenInvalidId_whenGetLockerById_thenReturnEmptyList() throws Exception {
+        when(lockerService.getLockerById(1L)).thenReturn(Optional.empty());
 
-        ResponseEntity<Locker> response = lockerController.getLockerById(id);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(lockerService, times(1)).getLockerById(id);
+        mockMvc.perform(get("/locker/1"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void givenValidLockerData_whenCreateLocker_thenReturnCreatedLocker() {
-        Locker locker = new Locker("Address 1", 10);
-        Locker savedLocker = new Locker("Address 1", 10);
-        when(lockerService.createLocker(locker)).thenReturn(savedLocker);
+    void givenValidLockerData_whenCreateLocker_thenReturnCreatedLocker() throws Exception {
+        when(lockerService.createLocker(any(Locker.class))).thenReturn(locker);
 
-        ResponseEntity<Locker> response = lockerController.createLocker(locker);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(savedLocker, response.getBody());
-        verify(lockerService, times(1)).createLocker(locker);
+        mockMvc.perform(post("/locker/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"address\":\"Address 1\",\"capacity\":10}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.address", is("Address 1")))
+                .andExpect(jsonPath("$.capacity", is(10)));
     }
 
     @Test
-    void givenExistingLockerId_whenUpdateLocker_tenReturnUpdatedLocker() {
-            Long id = 1L;
-            String newAddress = "New Address";
-            Integer newCapacity = 15;
-            Locker existingLocker = new Locker("Old Address", 10);
-            Locker updatedLocker = new Locker(newAddress, newCapacity);
-            when(lockerService.getLockerById(id)).thenReturn(Optional.of(existingLocker));
-            when(lockerService.updateLocker(id, newAddress, newCapacity)).thenReturn(updatedLocker);
+    void givenExistingLockerId_whenUpdateLocker_tenReturnUpdatedLocker() throws Exception {
+        when(lockerService.getLockerById(1L)).thenReturn(Optional.of(locker));
+        when(lockerService.updateLocker(1L, "New Address", 20)).thenReturn(locker);
 
-            ResponseEntity<Locker> response = lockerController.updateLocker(id, newAddress, newCapacity);
-
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            assertEquals(updatedLocker, response.getBody());
-            verify(lockerService, times(1)).getLockerById(id);
-            verify(lockerService, times(1)).updateLocker(id, newAddress, newCapacity);
+        mockMvc.perform(put("/locker/update/1")
+                        .param("newAddress", "New Address")
+                        .param("newCapacity", "20"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.address", is("Address 1")))
+                .andExpect(jsonPath("$.capacity", is(10)));
     }
 
 
     @Test
-    void givenNonExistingLockerId_whenUpdateLocker_thenReturnNotFound() {
-        Long id = 1L;
-        String newAddress = "New Address";
-        Integer newCapacity = 15;
-        when(lockerService.getLockerById(id)).thenReturn(Optional.empty());
+    void givenNonExistingLockerId_whenUpdateLocker_thenReturnNotFound() throws Exception {
+        when(lockerService.getLockerById(2L)).thenReturn(Optional.empty());
 
-        ResponseEntity<Locker> response = lockerController.updateLocker(id, newAddress, newCapacity);
+        mockMvc.perform(put("/locker/update/2")
+                        .param("newAddress", "New Address")
+                        .param("newCapacity", "20"))
+                .andExpect(status().isNotFound());
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(lockerService, times(1)).getLockerById(id);
-        verifyNoMoreInteractions(lockerService);
     }
 
     @Test
-    void givenExistingLockerId_whenDeleteLocker_thenReturnNoContent(){
-        Long id = 1L;
-        when(lockerService.getLockerById(id)).thenReturn(Optional.of(new Locker()));
+    void givenExistingLockerId_whenDeleteLocker_thenReturnNoContent() throws Exception {
+        when(lockerService.getLockerById(1L)).thenReturn(Optional.of(locker));
 
-        ResponseEntity<Void> response = lockerController.deleteLocker(id);
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(lockerService, times(1)).deleteLocker(id);
+        mockMvc.perform(delete("/locker/delete/1"))
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    void givenNonExistingLockerId_whenDeleteLocker_thenReturnNotFound() {
-        Long id = 1L;
-        when(lockerService.getLockerById(id)).thenReturn(Optional.empty());
+    void givenNonExistingLockerId_whenDeleteLocker_thenReturnNotFound() throws Exception {
+        when(lockerService.getLockerById(2L)).thenReturn(Optional.empty());
 
-        ResponseEntity<Void> response = lockerController.deleteLocker(id);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(lockerService, times(1)).getLockerById(id);
-        verifyNoMoreInteractions(lockerService);
+        mockMvc.perform(delete("/locker/delete/2"))
+                .andExpect(status().isNotFound());
     }
 }
