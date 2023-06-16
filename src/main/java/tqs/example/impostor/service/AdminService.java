@@ -98,7 +98,7 @@ public class AdminService implements AdminServiceInterface{
     }
 
     @Override
-    public boolean addACP(Long id,String address, float capacity) {
+    public boolean addACP(Long id,String address, double capacity) {
 
         return acpService.createACP(id, address, capacity);
     }

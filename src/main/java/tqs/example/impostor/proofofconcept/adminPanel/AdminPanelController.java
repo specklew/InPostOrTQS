@@ -65,11 +65,17 @@ public class AdminPanelController {
 
     @PostMapping("/ACP/search")
     public String searchACP(@RequestParam("id") String id, Model model) throws IOException, ParseException {
-        Optional<ACP> acpList = httpRequester.getAcpFromRemoteServer(id);
-        acpList.ifPresent(acp -> System.out.println("First ACP: " + acp));
-        model.addAttribute("acpList", acpList);
+        Optional<ACP> acpOptional = httpRequester.getAcpFromRemoteServer(id);
+        ACP acp = acpOptional.orElse(null); // Get the ACP object if present, or null if not
+
+        if (acp != null) {
+            System.out.println("First ACP: " + acp.getId() + acp.getAddress() + acp.getCapacity());
+            model.addAttribute("acp", acp);
+        }
+
         return "adminPanel/ACP";
     }
+
 
 
 
@@ -77,7 +83,7 @@ public class AdminPanelController {
     public String addACP(@RequestParam("id") String id, @RequestParam("address") String address,
                          @RequestParam("capacity") String capacity){
         //Possibility to add error page/popup
-        if(adminService.addACP(parseLong(id), address, Float.parseFloat(capacity))) return "adminPanel/ACP";
+        if(adminService.addACP(parseLong(id), address, Double.parseDouble(capacity))) return "adminPanel/ACP";
         return "adminPanel/ACP";
     }
 

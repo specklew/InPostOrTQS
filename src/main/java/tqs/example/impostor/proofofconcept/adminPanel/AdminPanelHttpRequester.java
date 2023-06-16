@@ -36,6 +36,7 @@ public class AdminPanelHttpRequester {
         ACP acp = new ACP();
         acp.setId((Long) acpJsonObject.get("id"));
         acp.setAddress((String) acpJsonObject.get("address"));
+        acp.setCapacity((double) acpJsonObject.get("capacity"));
 
         return Optional.of(acp);
     }

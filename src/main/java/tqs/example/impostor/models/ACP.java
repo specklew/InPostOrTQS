@@ -23,7 +23,7 @@ public class ACP {
     private String address;
 
     @Column(name = "capacity")
-    private float capacity;
+    private double capacity;
 
     public ACP() {
     }
@@ -49,11 +49,11 @@ public class ACP {
         this.address = address;
     }
 
-    public float getCapacity() {
+    public double getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(float capacity) {
+    public void setCapacity(double capacity) {
         this.capacity = capacity;
     }
 

@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <div class="box">
+    <div th:if="${acp != null}" class="box">
       <h2 class="subtitle">ACP Information</h2>
       <table class="table is-fullwidth">
         <thead>
@@ -113,9 +113,11 @@
           <th>Capacity</th>
         </tr>
         </thead>
-        <tbody id="acp-information">
-        <tr th:each="acp : ${acpList}">
-          <td th:text="${acp}"></td>
+        <tbody>
+        <tr>
+          <td th:text="${acp.id}"></td>
+          <td th:text="${acp.address}"></td>
+          <td th:text="${acp.capacity}"></td>
         </tr>
         </tbody>
       </table>
