@@ -48,7 +48,7 @@ class ACPControllerTest {
         List<ACP> acps = Collections.singletonList(acp);
         when(acpService.getAllACPs()).thenReturn(acps);
 
-        mockMvc.perform(get("/acp"))
+        mockMvc.perform(get("/acp/get/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].address", is("Address 1")))
@@ -132,6 +132,7 @@ class ACPControllerTest {
     //this one does not pass, idk why
     @Test
     void givenExistingACPId_whenUpdateACP_thenReturnUpdatedACP() throws Exception {
+        when(acpService.getACPById(any())).thenReturn(Optional.of(acp));
         when(acpService.updateACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(true);
 
         MvcResult result = mockMvc.perform(put("/acp/update/{id}", String.valueOf(1L))

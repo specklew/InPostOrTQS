@@ -49,7 +49,7 @@ public class ACPController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Boolean> updateACP(@PathVariable Long id, @RequestParam(required = false) String address, @RequestParam(required = false) Float capacity) {
+    public ResponseEntity<Boolean> updateACP(@PathVariable("id") Long id, @RequestParam(required = false) String address, @RequestParam(required = false) Float capacity) {
         Optional<ACP> optionalACP = acpService.getACPById(id);
         if (optionalACP.isPresent()) {
             boolean updatedACP = acpService.updateACP(id, address, capacity);
