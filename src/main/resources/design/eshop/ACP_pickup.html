@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ACP Parcel Collection</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        /* Custom Styles */
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .section {
+            padding: 3rem 0;
+        }
+
+        .title {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-weight: bold;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .table {
+            margin-bottom: 2rem;
+        }
+
+        .button.is-primary {
+            background-color: #61ea5c;
+            border-color: #61ea5c;
+            transition: background-color 0.3s ease;
+        }
+
+        .button.is-primary:hover {
+            background-color: #e61c57;
+            border-color: #e61c57;
+        }
+
+        .notification.is-danger {
+            background-color: #ff3860;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Navbar -->
+<nav class="navbar has-shadow" role="navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item">
+            ACP
+        </a>
+    </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Collection Point:</h1>
+        <div class="columns">
+            <div class="column is-half">
+                <div class="field">
+                    <label class="label">Enter Pickup Code:</label>
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="999999"
+                               placeholder="Pickup Code (max. 6 digits)" id="packageCodeInput">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary is-fullwidth" onclick="fetchParcelDetails()">Collect
+                            Parcel</button>
+                    </div>
+                </div>
+                <div id="errorNotification" class="notification is-danger is-hidden">
+                    Error: Too many digits provided. Please enter a 6-digit pickup code.
+                </div>
+            </div>
+        </div>
+        <div id="parcelDetails" class="is-hidden">
+            <h2 class="subtitle">Parcel Details</h2>
+            <div class="box">
+                <table class="table is-bordered is-fullwidth">
+                    <tbody>
+                    <tr>
+                        <th>Package Code</th>
+                        <td id="packageCode"></td>
+                    </tr>
+                    <tr>
+                        <th>Buyer Email Address</th>
+                        <td id="buyerEmail"></td>
+                    </tr>
+                    <tr>
+                        <th>Order Date</th>
+                        <td id="orderDate"></td>
+                    </tr>
+                    <tr>
+                        <th>Delivery Date</th>
+                        <td id="deliveryDate"></td>
+                    </tr>
+                    <tr>
+                        <th>Pickup Time</th>
+                        <td id="pickupTime"></td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td id="status"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button id="statusButton" class="button is-primary"
+                                onclick="changePackageStatus()">Mark as Collected</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let parcelDetails = {
+        packageCode: '',
+        buyerEmail: '',
+        orderDate: '',
+        deliveryDate: '',
+        pickupTime: '',
+        status: 'Delivered'
+    };
+
+    function fetchParcelDetails() {
+        const packageCodeInput = document.getElementById('packageCodeInput');
+        const packageCode = packageCodeInput.value;
+
+        if (packageCode.length !== 6) {
+            const errorNotification = document.getElementById('errorNotification');
+            errorNotification.classList.remove('is-hidden');
+            return;
+        }
+
+        // API request
+        parcelDetails.packageCode = packageCode;
+        parcelDetails.buyerEmail = 'bendover@gmail.com';
+        parcelDetails.orderDate = '2023-05-25';
+        parcelDetails.deliveryDate = '2023-05-27';
+        parcelDetails.pickupTime = getCurrentTime();
+
+        displayParcelDetails(parcelDetails);
+    }
+
+    function getCurrentTime() {
+        const currentTime = new Date();
+        const hours = currentTime.getHours();
+        const minutes = currentTime.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours % 12 || 12;
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+
+        return `${formattedHours}:${formattedMinutes} ${ampm}`;
+    }
+
+    function displayParcelDetails(parcelDetails) {
+        const packageCode = document.getElementById('packageCode');
+        const buyerEmail = document.getElementById('buyerEmail');
+        const orderDate = document.getElementById('orderDate');
+        const deliveryDate = document.getElementById('deliveryDate');
+        const pickupTime = document.getElementById('pickupTime');
+        const status = document.getElementById('status');
+        const statusButton = document.getElementById('statusButton');
+        const parcelDetailsSection = document.getElementById('parcelDetails');
+
+        packageCode.textContent = parcelDetails.packageCode;
+        buyerEmail.textContent = parcelDetails.buyerEmail;
+        orderDate.textContent = parcelDetails.orderDate;
+        deliveryDate.textContent = parcelDetails.deliveryDate;
+        pickupTime.textContent = parcelDetails.pickupTime;
+        status.textContent = parcelDetails.status;
+
+        if (parcelDetails.status === 'Collected') {
+            statusButton.textContent = 'Mark as Delivered';
+        } else if (parcelDetails.status === 'Delivered') {
+            statusButton.textContent = 'Mark as Collected';
+        }
+
+        parcelDetailsSection.classList.remove('is-hidden');
+    }
+
+    function changePackageStatus() {
+        if (parcelDetails.status === 'Collected') {
+            parcelDetails.status = 'Delivered';
+            const status = document.getElementById('status');
+            status.textContent = parcelDetails.status;
+            const statusButton = document.getElementById('statusButton');
+            statusButton.textContent = 'Mark as Collected';
+        } else if (parcelDetails.status === 'Delivered') {
+            parcelDetails.status = 'Collected';
+            const status = document.getElementById('status');
+            status.textContent = parcelDetails.status;
+            const statusButton = document.getElementById('statusButton');
+            statusButton.textContent = 'Mark as Delivered';
+        }
+    }
+</script>
+</body>
+</html>
+
+<!--only mark as picked up -->
+
+<!--<script>-->
+<!--    let parcelDetails = "Delivered";-->
+
+<!--    function fetchParcelDetails() {-->
+<!--        const packageCodeInput = document.getElementById('packageCodeInput');-->
+<!--        const packageCode = packageCodeInput.value;-->
+
+<!--        if (packageCode.length !== 6) {-->
+<!--            const errorNotification = document.getElementById('errorNotification');-->
+<!--            errorNotification.classList.remove('is-hidden');-->
+<!--            return;-->
+<!--        }-->
+
+<!--        // API request-->
+<!--        const parcelDetails = {-->
+<!--            packageCode: packageCode,-->
+<!--            buyerEmail: 'bendover@gmail.com',-->
+<!--            orderDate: '2023-05-25',-->
+<!--            deliveryDate: '2023-05-27',-->
+<!--            pickupTime: getCurrentTime(),-->
+<!--            status: 'Delivered'-->
+<!--        };-->
+
+<!--        displayParcelDetails(parcelDetails);-->
+<!--    }-->
+<!--    function getCurrentTime() {-->
+<!--        const currentTime = new Date();-->
+<!--        const hours = currentTime.getHours();-->
+<!--        const minutes = currentTime.getMinutes();-->
+<!--        const ampm = hours >= 12 ? 'PM' : 'AM';-->
+<!--        const formattedHours = hours % 12 || 12;-->
+<!--        const formattedMinutes = minutes.toString().padStart(2, '0');-->
+
+<!--        return `${formattedHours}:${formattedMinutes} ${ampm}`;-->
+<!--    }-->
+
+<!--    function displayParcelDetails(parcelDetails) {-->
+<!--        const packageCode = document.getElementById('packageCode');-->
+<!--        const buyerEmail = document.getElementById('buyerEmail');-->
+<!--        const orderDate = document.getElementById('orderDate');-->
+<!--        const deliveryDate = document.getElementById('deliveryDate');-->
+<!--        const status = document.getElementById('status');-->
+<!--        const parcelDetailsSection = document.getElementById('parcelDetails');-->
+
+<!--        packageCode.textContent = parcelDetails.packageCode;-->
+<!--        buyerEmail.textContent = parcelDetails.buyerEmail;-->
+<!--        orderDate.textContent = parcelDetails.orderDate;-->
+<!--        deliveryDate.textContent = parcelDetails.deliveryDate;-->
+<!--        pickupTime.textContent = parcelDetails.pickupTime;-->
+<!--        status.textContent = parcelDetails.status;-->
+
+<!--        parcelDetailsSection.classList.remove('is-hidden');-->
+<!--    }-->
+
+<!--    function changePackageStatus() {-->
+<!--        if (parcelDetails) {-->
+<!--            const status = document.getElementById('status');-->
+<!--            status.textContent = 'Picked Up';-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->

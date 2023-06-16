@@ -103,18 +103,20 @@
 
     <div class="box">
       <h2 class="subtitle">ACP Information</h2>
-      <table class="table is-fullwidth">
+      <table id="acp-table" class="table is-fullwidth">
         <thead>
         <tr>
           <th>ACP ID</th>
-          <th>Owner Surname</th>
-          <th>City</th>
-          <th>Street</th>
-          <th>Street No.</th>
-          <th>Phone Number</th>
+            <th>Address</th>
+          <th>Capacity</th>
+<!--          <th>City</th>-->
+<!--          <th>Street</th>-->
+<!--          <th>Street No.</th>-->
+<!--          <th>Phone Number</th>-->
+          <th>Actions</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="acp-table-body">
         <!-- ACP information rows will be dynamically added here -->
         </tbody>
       </table>
@@ -182,6 +184,41 @@
     </div>
   </div>
 </section>
+<script>
+  // Function to create a table row for an ACP
+  function createACPRow(acp) {
+    var row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${acp.id}</td>
+      <td>${acp.address}</td>
+      <td>${acp.capacity}</td>
+      <td>
+        <button class="button is-small is-primary">Edit</button>
+        <button class="button is-small is-danger">Delete</button>
+      </td>
+    `;
+    return row;
+  }
+
+  // Function to add the sample ACP to the table
+  function addSampleACPToTable() {
+    fetch('/addSampleACP') // Assuming this endpoint triggers the addSampleACP() method on the server
+            .then(response => response.json())
+            .then(data => {
+              if (data) {
+                var tableBody = document.getElementById("acp-table-body");
+                var newRow = createACPRow(data);
+                tableBody.appendChild(newRow);
+              }
+            })
+            .catch(error => {
+              console.error("Failed to add sample ACP:", error);
+            });
+  }
+
+  // Add the sample ACP to the table on page load
+  addSampleACPToTable();
+</script>
 </body>
 </html>
 

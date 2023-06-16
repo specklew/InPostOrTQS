@@ -5,7 +5,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.example.impostor.models.ACP;
-import tqs.example.impostor.models.Order;
 import tqs.example.impostor.repository.ACPRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ACPServiceTest {
+class ACPServiceTest {
     @Mock
     private ACPRepository acpRepository;
 
@@ -110,9 +109,9 @@ public class ACPServiceTest {
         ACP expectedACP = new ACP();
         when(acpRepository.findById(id)).thenReturn(Optional.of(expectedACP));
 
-        Set<Order> orderSet = new HashSet<>();
+        //Set<Order> orderSet = new HashSet<>();
 
-        assertTrue(acpService.updateACP(id, "add", 1f, orderSet));
+        assertTrue(acpService.updateACP(id, "add", 1f));
     }
 
     @Test
@@ -121,7 +120,7 @@ public class ACPServiceTest {
         ACP expectedACP = new ACP();
         when(acpRepository.findById(id)).thenReturn(Optional.of(expectedACP));
 
-        assertTrue(acpService.updateACP(id, null, -1f, null));
+        assertTrue(acpService.updateACP(id, null, -1f));
     }
 
     @Test
