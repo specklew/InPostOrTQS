@@ -128,8 +128,7 @@ class ACPControllerTest {
         String content = result.getResponse().getContentAsString();
         assertThat(content).isEmpty();
     }
-
-    //this one does not pass, idk why
+    
     @Test
     void givenExistingACPId_whenUpdateACP_thenReturnUpdatedACP() throws Exception {
         when(acpService.getACPById(any())).thenReturn(Optional.of(acp));
