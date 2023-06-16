@@ -19,7 +19,7 @@ import java.util.Objects;
 public class EShopHttpRequester {
 
     private final BasicHttpClient httpClient;
-    private final String websiteAddress = "http://localhost:8080";
+    private final static String websiteAddress = "http://localhost:8080";
 
     public EShopHttpRequester() {
         this.httpClient = new BasicHttpClient();
@@ -44,7 +44,7 @@ public class EShopHttpRequester {
         return result;
     }
 
-    public boolean postNewOrder(String address, String shop, String owner, String deliverer) throws IOException, URISyntaxException, ParseException {
+    public boolean postNewOrder(String address, String shop, String owner, String deliverer) throws IOException, URISyntaxException {
         List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("acpAddress", address));
         parameters.add(new BasicNameValuePair("shopName", shop));

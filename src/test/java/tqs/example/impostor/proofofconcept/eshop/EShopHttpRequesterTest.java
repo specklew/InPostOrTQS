@@ -75,6 +75,6 @@ class EShopHttpRequesterTest {
                 parameters1.get(0).getValue(),
                 parameters1.get(1).getValue(),
                 parameters1.get(2).getValue(),
-                parameters1.get(3).getValue())).isEqualTo(true);
+                parameters1.get(3).getValue())).isTrue();
     }
 }
