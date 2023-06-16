@@ -11,5 +11,5 @@ public interface AdminServiceInterface {
     String login(String userName, String password);
     List<Order> getPendingOrders();
     Optional<ACP> searchACPById(Long acpId);
-    public void addACP(Long id,String address, float capacity);
+    public boolean addACP(Long id,String address, float capacity);
 }

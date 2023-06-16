@@ -56,9 +56,11 @@ public class AdminPanelController {
 
 
     @PostMapping("/ACP/add")
-    public void addACP(@RequestParam("id") String id, @RequestParam("address") String address,
+    public String addACP(@RequestParam("id") String id, @RequestParam("address") String address,
                          @RequestParam("capacity") String capacity){
-        adminService.addACP(parseLong(id), address, Float.parseFloat(capacity));
+        //Possibility to add error page/popup
+        if(adminService.addACP(parseLong(id), address, Float.parseFloat(capacity))) return "adminPanel/ACP";
+        return "adminPanel/ACP";
     }
 
 
