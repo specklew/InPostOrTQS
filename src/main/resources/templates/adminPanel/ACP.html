@@ -56,13 +56,13 @@
     <div class="navbar-item">
       <div class="field">
         <p class="control">
-          <a href="ACP.html" class="button">
+          <a href="adminPanel/ACP" class="button">
             <span class="icon">
               <ion-icon name="navigate"></ion-icon>
             </span>
             <span>ACP Register</span>
           </a>
-          <a href="deliveries.html" class="button">
+          <a href="adminPanel/deliveries" class="button">
             <span class="icon">
               <ion-icon name="cart"></ion-icon>
             </span>
@@ -87,7 +87,7 @@
               <div class="field is-grouped">
                 <div class="control">
                   <label class="label">ACP ID Number</label>
-                  <input class="input" type="text" placeholder="Enter ACP ID Number">
+                  <input class="input" type="text" placeholder="Enter ACP ID Number" id="acp-id-input">
                 </div>
                 <div class="field is-grouped submit-button">
                   <div class="control">
@@ -114,7 +114,7 @@
           <th>Phone Number</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="acp-information">
         <!-- ACP information rows will be dynamically added here -->
         </tbody>
       </table>
@@ -125,49 +125,17 @@
       <div class="columns is-multiline">
         <div class="column is-half">
           <div class="field">
-            <label class="label">Name</label>
+            <label class="label">Address</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Enter ACP Name">
+              <input class="input" type="text" placeholder="Enter ACP Address">
             </div>
           </div>
         </div>
         <div class="column is-half">
           <div class="field">
-            <label class="label">Owner Name</label>
+            <label class="label">Capacity</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Enter Owner Surname">
-            </div>
-          </div>
-        </div>
-        <div class="column is-half">
-          <div class="field">
-            <label class="label">City</label>
-            <div class="control">
-              <input class="input" type="text" placeholder="Enter City">
-            </div>
-          </div>
-        </div>
-        <div class="column is-half">
-          <div class="field">
-            <label class="label">Street</label>
-            <div class="control">
-              <input class="input" type="text" placeholder="Enter Street">
-            </div>
-          </div>
-        </div>
-        <div class="column is-half">
-          <div class="field">
-            <label class="label">Street No</label>
-            <div class="control">
-              <input class="input" type="text" placeholder="Enter Street No.">
-            </div>
-          </div>
-        </div>
-        <div class="column is-half">
-          <div class="field">
-            <label class="label">Phone Number</label>
-            <div class="control">
-              <input class="input" type="text" placeholder="Enter Phone Number">
+              <input class="input" type="text" placeholder="Enter Capacity">
             </div>
           </div>
         </div>

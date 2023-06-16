@@ -28,7 +28,7 @@ public class AdminPanelController {
         return "adminPanel/admin_login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/logged")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
         String loginResult = adminService.login(username, password);
         if (loginResult.equals("ACP")) {
@@ -39,6 +39,27 @@ public class AdminPanelController {
             return "adminPanel/admin_login";
         }
     }
+
+    @GetMapping("/adminPanel/ACP")
+    public String acpPage() {
+        // Logic for handling ACP page
+        return "adminPanel/ACP";
+    }
+
+    @GetMapping("/adminPanel/deliveries")
+    public String deliveriesPage() {
+        // Logic for handling deliveries page
+        return "adminPanel/deliveries";
+    }
+
+
+//    @PostMapping("/ACP/add")
+//    public String addACP(@RequestParam("name") String ownerName, @RequestParam("surname") String ownerSurname,
+//                         @RequestParam("city") String city, @RequestParam("street") String street,
+//                         @RequestParam("streetNumber") String streetNumber, @RequestParam("phone") String phoneNumber){
+//    }
+
+
 
 }
 
