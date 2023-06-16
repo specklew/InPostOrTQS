@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import tqs.example.impostor.service.AdminService;
 
+import static java.lang.Long.parseLong;
+
 @Controller
 @RequestMapping("/adminPanel")
 public class AdminPanelController {
@@ -53,11 +55,11 @@ public class AdminPanelController {
     }
 
 
-//    @PostMapping("/ACP/add")
-//    public String addACP(@RequestParam("name") String ownerName, @RequestParam("surname") String ownerSurname,
-//                         @RequestParam("city") String city, @RequestParam("street") String street,
-//                         @RequestParam("streetNumber") String streetNumber, @RequestParam("phone") String phoneNumber){
-//    }
+    @PostMapping("/ACP/add")
+    public void addACP(@RequestParam("id") String id, @RequestParam("address") String address,
+                         @RequestParam("capacity") String capacity){
+        adminService.addACP(parseLong(id), address, Float.parseFloat(capacity));
+    }
 
 
 

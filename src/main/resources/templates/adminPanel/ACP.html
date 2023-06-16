@@ -122,12 +122,21 @@
 
     <div class="box">
       <h2 class="subtitle">Add New ACP</h2>
+      <form action="/adminPanel/ACP/add" method="post">
       <div class="columns is-multiline">
+        <div class="column is-half">
+          <div class="field">
+            <label class="label">ID</label>
+            <div class="control">
+              <input class="input" type="text" name="id" placeholder="Enter ID">
+            </div>
+          </div>
+        </div>
         <div class="column is-half">
           <div class="field">
             <label class="label">Address</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Enter ACP Address">
+              <input class="input" type="text" name="address" placeholder="Enter ACP Address">
             </div>
           </div>
         </div>
@@ -135,7 +144,7 @@
           <div class="field">
             <label class="label">Capacity</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Enter Capacity">
+              <input class="input" type="text" name="capacity" placeholder="Enter Capacity">
             </div>
           </div>
         </div>
@@ -147,6 +156,7 @@
           </div>
         </div>
       </div>
+      </form>
     </div>
   </div>
 </section>
