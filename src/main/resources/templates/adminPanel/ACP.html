@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -82,12 +82,13 @@
       <div class="column is-half">
         <div class="box">
           <h2 class="subtitle">Search ACP</h2>
+          <form action="/adminPanel/ACP/search" method="post">
           <div class="field is-horizontal">
             <div class="field-body">
               <div class="field is-grouped">
                 <div class="control">
                   <label class="label">ACP ID Number</label>
-                  <input class="input" type="text" placeholder="Enter ACP ID Number" id="acp-id-input">
+                  <input class="input" type="text" name="id" placeholder="Enter ACP ID Number" id="acp-id-input">
                 </div>
                 <div class="field is-grouped submit-button">
                   <div class="control">
@@ -97,6 +98,7 @@
               </div>
             </div>
           </div>
+          </form>
         </div>
       </div>
     </div>
@@ -107,15 +109,14 @@
         <thead>
         <tr>
           <th>ACP ID</th>
-          <th>Owner Surname</th>
-          <th>City</th>
-          <th>Street</th>
-          <th>Street No.</th>
-          <th>Phone Number</th>
+          <th>Address</th>
+          <th>Capacity</th>
         </tr>
         </thead>
         <tbody id="acp-information">
-        <!-- ACP information rows will be dynamically added here -->
+        <tr th:each="acp : ${acpList}">
+          <td th:text="${acp}"></td>
+        </tr>
         </tbody>
       </table>
     </div>

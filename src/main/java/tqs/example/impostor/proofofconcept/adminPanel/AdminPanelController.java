@@ -1,12 +1,21 @@
 package tqs.example.impostor.proofofconcept.adminPanel;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.service.AdminService;
+import org.springframework.ui.Model;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static java.lang.Long.parseLong;
 
@@ -53,6 +62,15 @@ public class AdminPanelController {
         // Logic for handling deliveries page
         return "adminPanel/deliveries";
     }
+
+    @PostMapping("/ACP/search")
+    public String searchACP(@RequestParam("id") String id, Model model) throws IOException, ParseException {
+        Optional<ACP> acpList = httpRequester.getAcpFromRemoteServer(id);
+        acpList.ifPresent(acp -> System.out.println("First ACP: " + acp));
+        model.addAttribute("acpList", acpList);
+        return "adminPanel/ACP";
+    }
+
 
 
     @PostMapping("/ACP/add")
