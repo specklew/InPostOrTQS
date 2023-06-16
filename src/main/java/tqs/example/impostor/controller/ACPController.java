@@ -1,11 +1,16 @@
 package tqs.example.impostor.controller;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.service.ACPService;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +22,14 @@ public class ACPController {
 
     public ACPController(ACPService acpService) {
         this.acpService = acpService;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Resource> getDefaultPage() throws IOException {
+        Resource htmlResource = new ClassPathResource("design/eshop/ACP.html");
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body(htmlResource);
     }
 
     @GetMapping("/get/all")
