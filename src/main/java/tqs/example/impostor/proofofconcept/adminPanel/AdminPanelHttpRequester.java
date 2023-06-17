@@ -7,6 +7,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import tqs.example.impostor.models.ACP;
+import tqs.example.impostor.models.Locker;
+import tqs.example.impostor.models.Order;
 import tqs.example.impostor.proofofconcept.BasicHttpClient;
 
 import java.io.IOException;
@@ -40,5 +42,35 @@ public class AdminPanelHttpRequester {
 
         return Optional.of(acp);
     }
+
+    public List<Order> getOrdersFromRemoteServer() throws IOException, ParseException {
+        String response = httpClient.doHttpGet(websiteAddress + "/deliveries");
+        System.out.println("Response: " + response);
+
+        JSONObject jsonResponse = (JSONObject) new JSONParser().parse(response);
+        JSONArray orderJsonArray = (JSONArray) jsonResponse.get("orders");
+
+        List<Order> result = new ArrayList<>();
+
+        for (Object object : orderJsonArray) {
+            JSONObject orderJsonObject = (JSONObject) object;
+
+            Order order = new Order();
+            order.setId((Long) orderJsonObject.get("id"));
+            order.setShopName((String) orderJsonObject.get("shopName"));
+            order.setOwner((String) orderJsonObject.get("owner"));
+            order.setDeliverer((String) orderJsonObject.get("deliverer"));
+
+            result.add(order);
+        }
+
+        return result;
+    }
+
+
+
+
+
+
 
 }

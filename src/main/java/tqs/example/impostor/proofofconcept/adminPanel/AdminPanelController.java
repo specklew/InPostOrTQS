@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import tqs.example.impostor.models.ACP;
+import tqs.example.impostor.models.Order;
 import tqs.example.impostor.service.AdminService;
 import org.springframework.ui.Model;
 
@@ -40,11 +41,14 @@ public class AdminPanelController {
     }
 
     @PostMapping("/logged")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) throws IOException, ParseException {
         String loginResult = adminService.login(username, password);
         if (loginResult.equals("ACP")) {
             // Login successful, redirect to the next page
-            return "adminPanel/ACP";
+            List<Order> orders = httpRequester.getOrdersFromRemoteServer();
+            model.addAttribute("orders", orders);
+
+            return "adminPanel/deliveries";
         } else {
             // Login failed, return to the login page with an error message
             return "adminPanel/admin_login";
@@ -76,9 +80,6 @@ public class AdminPanelController {
         return "adminPanel/ACP";
     }
 
-
-
-
     @PostMapping("/ACP/add")
     public String addACP(@RequestParam("id") String id, @RequestParam("address") String address,
                          @RequestParam("capacity") String capacity){
@@ -87,6 +88,13 @@ public class AdminPanelController {
         return "adminPanel/ACP";
     }
 
+    @PostMapping("/deliveries")
+    public String getOrders(Model model) throws IOException, ParseException {
+        List<Order> orders = httpRequester.getOrdersFromRemoteServer();
+        model.addAttribute("orders", orders);
+
+       return "adminPanel/deliveries";
+    }
 
 
 }

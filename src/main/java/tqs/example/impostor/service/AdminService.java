@@ -20,6 +20,9 @@ public class AdminService implements AdminServiceInterface{
     @Autowired
     private ACPService acpService;
 
+    @Autowired
+    private OrderService orderService;
+
     public AdminService(AdminRepository adminRepository){
         this.adminRepository = adminRepository;
     }
@@ -89,8 +92,12 @@ public class AdminService implements AdminServiceInterface{
     //Function below is waiting for Order Service
     @Override
     public List<Order> getPendingOrders() {
-        //TODO
-        return null;
+        System.out.println("TEST 2");
+        for(int i = 0 ; i <  orderService.getAllOrders().size() ; i++){
+            System.out.println(orderService.getAllOrders().get(i));
+        }
+
+        return orderService.getAllOrders();
     }
 
     public Optional<ACP> searchACPById(Long acpId) {
