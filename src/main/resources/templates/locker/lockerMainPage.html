@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>InPostor Locker</title>
+  <style>
+    .button.is-black {
+      background-color: #000;
+      color: #fff;
+    }
+    .button.is-black:hover {
+      background-color: #007bff !important;
+      color: #fff !important;
+      border-color: #007bff !important;
+      box-shadow: none !important;
+    }
+    .submit-button {
+      margin-top: 30px;
+      margin-left: 15px;
+    }
+    .navbar-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+    }
+    .navbar-center span {
+      color: #000;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 50px;
+    }
+    .form-container label,
+    .form-container input,
+    .form-container button {
+      width: 300px;
+      height: 50px;
+      font-size: 18px;
+    }
+    .form-container label {
+      font-size: 24px;
+    }
+    .form-container input {
+      margin-top: 10px;
+    }
+    .button.is-black:hover {
+      animation: button-pulse 0.5s infinite alternate;
+    }
+
+    @keyframes button-pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.03); }
+    }
+    .number-keyboard {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 5px;
+      margin-top: 10px;
+    }
+
+    .number-keyboard button {
+      width: 100%;
+      height: 50px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body style="background-color: #f0f0f0;">
+<div class="navbar-center">
+  <span>InPostor Locker</span>
+</div>
+
+<div class="form-container">
+  <form>
+    <label for="order-id" style="font-size: 24px;">Parcel number:</label>
+    <input type="text" id="order-id" name="order-id">
+    <div class="number-keyboard">
+      <button type="button" onclick="appendNumber(1)">1</button>
+      <button type="button" onclick="appendNumber(2)">2</button>
+      <button type="button" onclick="appendNumber(3)">3</button>
+      <button type="button" onclick="appendNumber(4)">4</button>
+      <button type="button" onclick="appendNumber(5)">5</button>
+      <button type="button" onclick="appendNumber(6)">6</button>
+      <button type="button" onclick="appendNumber(7)">7</button>
+      <button type="button" onclick="appendNumber(8)">8</button>
+      <button type="button" onclick="appendNumber(9)">9</button>
+      <button type="button" onclick="appendNumber(0)">0</button>
+      <button type="button" onclick="clearInput()">Clear</button>
+    </div>
+    <button type="submit" class="button is-black submit-button">Submit</button>
+  </form>
+</div>
+
+<script>
+  function appendNumber(number) {
+    const orderIdInput = document.getElementById("order-id");
+    orderIdInput.value += number;
+  }
+
+  function clearInput() {
+    const orderIdInput = document.getElementById("order-id");
+    orderIdInput.value = "";
+  }
+</script>
+
+</body>
+</html>
