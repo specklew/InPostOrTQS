@@ -1,5 +1,7 @@
 package tqs.example.impostor.controller;
 
+//import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Operation(description = "Create an admin")
     @PostMapping("/create")
     public ResponseEntity<String> createAdmin(@RequestParam("username") String username,
                                               @RequestParam("password") String password) {
@@ -32,7 +35,7 @@ public class AdminController {
         }
     }
 
-
+    @Operation(description = "Get Admin by ID")
     @GetMapping("/{id}")
     public ResponseEntity<Admin> getAdminById(@PathVariable Long id) {
         Admin admin = adminService.getAdminById(id);
@@ -43,6 +46,7 @@ public class AdminController {
         }
     }
 
+    @Operation(description = "Update Admin")
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateAdmin(@PathVariable Long id,
                                               @RequestParam(required = false) String username,
@@ -60,12 +64,14 @@ public class AdminController {
         return ResponseEntity.ok("Admin updated successfully");
     }
 
+    @Operation(description = "Delete Admin")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) {
         adminService.deleteAdmin(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Operation(description = "Login to account")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam("username") String username, @RequestParam("password") String password) {
         // Pass the username and password to the AdminService for authentication
@@ -79,6 +85,8 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+
+    @Operation(description = "Search ACP by ID")
     @GetMapping("/acp/{id}")
     public ResponseEntity<ACP> searchACPById(@PathVariable Long id) {
         Optional<ACP> acp = adminService.searchACPById(id);
@@ -86,6 +94,7 @@ public class AdminController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(description = "Add ACP")
     @PostMapping("/acp")
     public ResponseEntity<String> addACP(@RequestParam Long id,
                                          @RequestParam String address,
