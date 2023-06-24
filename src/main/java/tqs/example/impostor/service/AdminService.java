@@ -20,6 +20,9 @@ public class AdminService implements AdminServiceInterface{
     @Autowired
     private ACPService acpService;
 
+    @Autowired
+    private OrderService orderService;
+
     public AdminService(AdminRepository adminRepository){
         this.adminRepository = adminRepository;
     }
@@ -27,13 +30,20 @@ public class AdminService implements AdminServiceInterface{
     //Create
     public boolean createAdmin(String userName, String password){
         if(userName == null || password == null) return false;
-
+        if(adminRepository.findByUserName(userName).isPresent()) return false;
         Admin admin = new Admin();
         admin.setUserName(userName);
         admin.setPassword(password);
 
         adminRepository.saveAndFlush(admin);
         return true;
+    }
+
+    public void createAdminProgrammatically() {
+        String username = "dummy";
+        String password = "password";
+
+        createAdmin(username, password);
     }
 
     // Read
@@ -82,8 +92,12 @@ public class AdminService implements AdminServiceInterface{
     //Function below is waiting for Order Service
     @Override
     public List<Order> getPendingOrders() {
-        //TODO
-        return null;
+        System.out.println("TEST 2");
+        for(int i = 0 ; i <  orderService.getAllOrders().size() ; i++){
+            System.out.println(orderService.getAllOrders().get(i));
+        }
+
+        return orderService.getAllOrders();
     }
 
     public Optional<ACP> searchACPById(Long acpId) {
@@ -91,7 +105,8 @@ public class AdminService implements AdminServiceInterface{
     }
 
     @Override
-    public void addACP(Long id,String address, float capacity) {
-        acpService.createACP(id, address, capacity);
+    public boolean addACP(Long id,String address, double capacity) {
+
+        return acpService.createACP(id, address, capacity);
     }
 }

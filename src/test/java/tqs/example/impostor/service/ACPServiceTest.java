@@ -32,7 +32,7 @@ class ACPServiceTest {
     void createACP_ValidData_ReturnsTrue() {
         Long id = 1L;
         String address = "piwosz";
-        float capacity = 10.0f;
+        double capacity = 10.0;
         boolean result = acpService.createACP(id, address, capacity);
         assertTrue(result);
     }
@@ -41,7 +41,7 @@ class ACPServiceTest {
     void createACP_NullAddress_ReturnsFalse() {
         Long id = 1L;
         String address = null;
-        float capacity = 10.0f;
+        double capacity = 10.0;
         boolean result = acpService.createACP(id, address, capacity);
         assertFalse(result);
     }
@@ -50,7 +50,7 @@ class ACPServiceTest {
     void createACP_ZeroCapacity_ReturnsFalse() {
         Long id = 1L;
         String address = "piwosz";
-        float capacity = 0.0f;
+        double capacity = 0.0;
         boolean result = acpService.createACP(id, address, capacity);
         assertFalse(result);
     }
@@ -59,7 +59,7 @@ class ACPServiceTest {
     void createACP_AlreadyExists_ReturnsFalse() {
         Long id = 1L;
         String address = "piwosz";
-        float capacity = 10.0f;
+        double capacity = 10.0;
         when(acpRepository.existsById(id)).thenReturn(true);
         boolean result = acpService.createACP(id, address, capacity);
         assertFalse(result);

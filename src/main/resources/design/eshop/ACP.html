@@ -1,78 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ACPs</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-
-<style>
-  .button.is-black {
-    background-color: #000;
-    color: #fff;
-  }
-  .button.is-black:hover {
-    background-color: #ab9c04 !important;
-    color: #fff !important;
-    border-color: #ab9c04 !important;
-    box-shadow: none !important;
-  }
-  .submit-button {
-    margin-top: 30px;
-    margin-left: 15px;
-  }
-  .navbar-center {
-    flex-grow: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-left: 500px;
-  }
-  .navbar-center span {
-    color: #000;
-    font-size: 19px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    display: inline-block;
-  }
-</style>
+  <title>InPostor Locker</title>
+  <style>
+    .button.is-black {
+      background-color: #000;
+      color: #fff;
+    }
+    .button.is-black:hover {
+      background-color: #007bff !important; /* Changed to blue color */
+      color: #fff !important;
+      border-color: #007bff !important;
+      box-shadow: none !important;
+    }
+    .submit-button {
+      margin-top: 30px;
+      margin-left: 15px;
+    }
+    .navbar-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+    }
+    .navbar-center span {
+      color: #000;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 50px;
+    }
+    .form-container label,
+    .form-container input,
+    .form-container button {
+      width: 300px;
+      height: 50px;
+      font-size: 18px;
+    }
+    .form-container label {
+      font-size: 24px; /* Increased label font size */
+    }
+    .form-container input {
+      margin-top: 10px;
+    }
+  </style>
 </head>
-
 <body>
-<!-- Navbar -->
-<nav class="navbar has-shadow" role="navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item">
-      InPostor
-    </a>
-  </div>
+<div class="navbar-center">
+  <span>InPostor Locker</span>
+</div>
 
-  <div class="navbar-center">
-    <span class="is-uppercase">ADMIN MANAGEMENT SYSTEM</span>
-  </div>
-
-  <!-- Navbar menu -->
-  <div class="navbar-end">
-    <div class="navbar-item">
-      <div class="field">
-        <p class="control">
-          <a href="ACP.html" class="button">
-            <span class="icon">
-              <ion-icon name="navigate"></ion-icon>
-            </span>
-            <span>ACP Register</span>
-          </a>
-          <a href="deliveries.html" class="button">
-            <span class="icon">
-              <ion-icon name="cart"></ion-icon>
-            </span>
-            <span>Deliveries</span>
-          </a>
-        </p>
-      </div>
-    </div>
-  </div>
-</nav>
 
 <!-- ACP Register -->
 <section class="section">
@@ -221,7 +204,3 @@
 </script>
 </body>
 </html>
-
-<!-- Ionicons -->
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

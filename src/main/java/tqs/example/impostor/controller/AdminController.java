@@ -8,8 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.models.Admin;
+import tqs.example.impostor.models.Locker;
+import tqs.example.impostor.models.Order;
 import tqs.example.impostor.service.AdminService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -101,6 +104,16 @@ public class AdminController {
                                          @RequestParam float capacity) {
         adminService.addACP(id, address, capacity);
         return ResponseEntity.ok("ACP added successfully");
+    }
+
+    @GetMapping("/deliveries")
+    public ResponseEntity<List<Order>> getAllOrders(){
+        List<Order> orders = adminService.getPendingOrders();
+        System.out.println("TEST 3");
+        for(int i = 0 ; i <  orders.size() ; i++){
+            System.out.println(orders.get(i));
+        }
+        return ResponseEntity.ok(orders);
     }
 
 

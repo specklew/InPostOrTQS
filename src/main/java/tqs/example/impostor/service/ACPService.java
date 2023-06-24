@@ -23,7 +23,7 @@ public class ACPService {
         return acpRepository.findByAddress(address);
     }
 
-    public boolean createACP(Long id, String address, float capacity) {
+    public boolean createACP(Long id, String address, double capacity) {
         if (address == null || capacity == 0) {
             return false;
         }
@@ -47,7 +47,7 @@ public class ACPService {
     }
 
 
-    public boolean updateACP(Long id, String address, float capacity) {
+    public boolean updateACP(Long id, String address, double capacity) {
         Optional<ACP> acpOptional = acpRepository.findById(id);
         if (acpOptional.isPresent()) {
             ACP acp = acpOptional.get();

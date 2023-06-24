@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>InPostor Locker</title>
+  <style>
+    .button.is-black {
+      background-color: #000;
+      color: #fff;
+    }
+    .button.is-black:hover {
+      background-color: #007bff !important; /* Changed to blue color */
+      color: #fff !important;
+      border-color: #007bff !important;
+      box-shadow: none !important;
+    }
+    .submit-button {
+      margin-top: 30px;
+      margin-left: 15px;
+    }
+    .navbar-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+    }
+    .navbar-center span {
+      color: #000;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 50px;
+    }
+    .form-container label,
+    .form-container input,
+    .form-container button {
+      width: 300px;
+      height: 50px;
+      font-size: 18px;
+    }
+    .form-container label {
+      font-size: 24px; /* Increased label font size */
+    }
+    .form-container input {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="navbar-center">
+  <span>InPostor Locker</span>
+</div>
+
+<div class="form-container">
+  <form>
+    <label for="order-id" style="font-size: 24px;">Order Number:</label> <!-- Inline style to override previous font size -->
+    <input type="text" id="order-id" name="order-id">
+    <button type="submit" class="button is-black submit-button">Submit</button>
+  </form>
+</div>
+</body>
+</html>
