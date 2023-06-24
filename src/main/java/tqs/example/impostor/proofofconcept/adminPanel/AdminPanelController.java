@@ -45,10 +45,10 @@ public class AdminPanelController {
         String loginResult = adminService.login(username, password);
         if (loginResult.equals("ACP")) {
             // Login successful, redirect to the next page
-            List<Order> orders = httpRequester.getOrdersFromRemoteServer();
-            model.addAttribute("orders", orders);
+            //List<Order> orders = httpRequester.getOrdersFromRemoteServer();
+            //model.addAttribute("orders", orders);
 
-            return "adminPanel/deliveries";
+            return "adminPanel/ACP";
         } else {
             // Login failed, return to the login page with an error message
             return "adminPanel/admin_login";
