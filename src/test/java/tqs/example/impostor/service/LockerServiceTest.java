@@ -34,27 +34,27 @@ public class LockerServiceTest {
     @Test
     void givenAllLockers_thenReturnAllLockers() {
         List<Locker> expectedLockers = new ArrayList<>();
-        expectedLockers.add(new Locker("Address 1", 10));
-        expectedLockers.add(new Locker("Address 2", 20));
+        expectedLockers.add(new Locker("Address 1", 0.5f));
+        expectedLockers.add(new Locker("Address 2", 0.8f));
         when(lockerRepository.findAll()).thenReturn(expectedLockers);
 
         List<Locker> actualLockers = lockerService.getAllLockers();
 
-        assertEquals(expectedLockers.size(), actualLockers.size());
-        assertEquals(expectedLockers.get(0), actualLockers.get(0));
-        assertEquals(expectedLockers.get(1), actualLockers.get(1));
+        assertEquals(expectedLockers, actualLockers);
+        verify(lockerRepository, times(1)).findAll();
     }
 
     @Test
     void givenValidId_whenGetLockerById_thenReturnLocker() {
         Long id = 1L;
-        Locker expectedLocker = new Locker("Address 1", 10);
+        Locker expectedLocker = new Locker("Address 1", 0.5f);
         when(lockerRepository.findById(id)).thenReturn(Optional.of(expectedLocker));
 
         Optional<Locker> actualLocker = lockerService.getLockerById(id);
 
         assertTrue(actualLocker.isPresent());
         assertEquals(expectedLocker, actualLocker.get());
+        verify(lockerRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -77,61 +77,72 @@ public class LockerServiceTest {
 
         assertTrue(actualLocker.isPresent());
         assertEquals(expectedLocker, actualLocker.get());
+        verify(lockerRepository, times(1)).findByAddress("Valid Address");
+
     }
 
     @Test
     void givenInvalidAddress_whenGetLockerByAddress_thenReturnLocker() {
-        String address = "Non-existent address";
-        when(lockerRepository.findByAddress(address)).thenReturn(Optional.empty());
+        String invalidAddress = "Invalid Address";
 
-        Optional<Locker> actualLocker = lockerService.getLockerByAddress(address);
+        when(lockerRepository.findByAddress(invalidAddress)).thenReturn(Optional.empty());
 
-        assertFalse(actualLocker.isPresent());
+        Optional<Locker> result = lockerService.getLockerByAddress(invalidAddress);
+
+        assertTrue(result.isEmpty());
+        verify(lockerRepository, times(1)).findByAddress(invalidAddress);
+
     }
+
 
     @Test
     void givenValidData_whenCreateLocker_thenReturnSavedLocker() {
-        Locker locker = new Locker("Address", 10);
-        when(lockerRepository.save(locker)).thenReturn(locker);
+        Long id = 1L;
+        String address = "Address 1";
+        float capacity = 0.5f;
 
+        when(lockerRepository.existsById(id)).thenReturn(false);
 
-        Locker savedLocker = lockerService.createLocker(locker);
+        boolean result = lockerService.createLocker(id, address, capacity);
 
-        verify(lockerRepository, times(1)).save(locker);
-        assertEquals(locker, savedLocker);
+        assertTrue(result);
     }
 
     @Test
-    void givenExistingLockerId_whenUpdateLocker_tenReturnUpdatedLocker() {
+    void givenExistingLockerId_whenUpdateLocker_thenReturnUpdatedLocker() {
         Long id = 1L;
         String newAddress = "New Address";
-        Integer newCapacity = 10;
+        float newCapacity = 10;
         Locker existingLocker = new Locker();
         existingLocker.setId(id);
 
         when(lockerRepository.findById(id)).thenReturn(Optional.of(existingLocker));
-        when(lockerRepository.save(any(Locker.class))).thenReturn(existingLocker);
+        when(lockerRepository.saveAndFlush(any(Locker.class))).thenReturn(existingLocker);
 
-        Locker updatedLocker = lockerService.updateLocker(id, newAddress, newCapacity);
+        boolean updateResult = lockerService.updateLocker(id, newAddress, newCapacity);
 
-        verify(lockerRepository, times(1)).save(existingLocker);
-        assertEquals(newAddress, updatedLocker.getAddress());
-        assertEquals(newCapacity, updatedLocker.getCapacity());
+        verify(lockerRepository, times(1)).saveAndFlush(any(Locker.class));
+        assertTrue(updateResult);
     }
 
     @Test
-    void givenNonExistingLockerId_whenUpdateLocker_tenReturnNull() {
+    void givenNonExistingLockerId_whenUpdateLocker_thenReturnFalse() {
+        // Arrange
         Long id = 1L;
         String newAddress = "New Address";
-        Integer newCapacity = 20;
+        float newCapacity = 20;
+
         when(lockerRepository.findById(id)).thenReturn(Optional.empty());
 
-        Locker result = lockerService.updateLocker(id, newAddress, newCapacity);
+        // Act
+        boolean updateResult = lockerService.updateLocker(id, newAddress, newCapacity);
 
+        // Assert
         verify(lockerRepository, times(1)).findById(id);
-        verify(lockerRepository, never()).save(any());
-        assertNull(result);
+        verify(lockerRepository, never()).save(any(Locker.class));
+        assertFalse(updateResult);
     }
+
 
     @Test
     void givenExistingLockerId_whenDeleteLocker_thenDeleteLocker() {

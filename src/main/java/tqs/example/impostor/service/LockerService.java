@@ -1,6 +1,7 @@
 package tqs.example.impostor.service;
 
 import org.springframework.stereotype.Service;
+import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.models.Locker;
 import tqs.example.impostor.repository.LockerRepository;
 
@@ -29,19 +30,41 @@ public class LockerService {
     }
 
     // CRUD
-    public Locker createLocker(Locker locker) {
-        return lockerRepository.save(locker);
+    public boolean createLocker(Long id, String address, float capacity) {
+        if (address == null || capacity == 0) {
+            return false;
+        }
+
+        if (lockerRepository.existsById(id)) {
+            return false;
+        }
+
+        Locker locker = new Locker();
+        locker.setId(id);
+        locker.setAddress(address);
+        locker.setCapacity(capacity);
+
+        lockerRepository.saveAndFlush(locker);
+
+        return true;
     }
 
-    public Locker updateLocker(Long id, String newAddress, Integer newCapacity) {
-        Optional<Locker> optionalLocker = lockerRepository.findById(id);
-        if (optionalLocker.isPresent()) {
-            Locker locker = optionalLocker.get();
-            locker.setAddress(newAddress);
-            locker.setCapacity(newCapacity);
-            return lockerRepository.save(locker);
+
+    public boolean updateLocker(Long id, String address, Float capacity) {
+        Optional<Locker> lockerOptional = lockerRepository.findById(id);
+        if (lockerOptional.isPresent()) {
+            Locker locker = lockerOptional.get();
+            if (address != null) {
+                locker.setAddress(address);
+            }
+            if (capacity != null) {
+                locker.setCapacity(capacity);
+            }
+            lockerRepository.saveAndFlush(locker);
+            return true;
+        } else {
+            return false; // when Locker with specified ID does not exist
         }
-        return null;
     }
 
 

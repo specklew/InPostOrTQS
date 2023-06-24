@@ -22,7 +22,7 @@ public class Locker {
     private String address;
 
     @Column(name = "capacity")
-    private int capacity;
+    private float capacity;
 
     @OneToMany(mappedBy = "locker", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Order> orders;
@@ -31,7 +31,7 @@ public class Locker {
 
     }
 
-    public Locker(String address, int capacity) {
+    public Locker(String address, float capacity) {
         this.address = address;
         this.capacity = capacity;
         this.orders = new ArrayList<>();
@@ -53,11 +53,11 @@ public class Locker {
         return address;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(float capacity) {
         this.capacity = capacity;
     }
 
-    public int getCapacity() {
+    public float getCapacity() {
         return capacity;
     }
 

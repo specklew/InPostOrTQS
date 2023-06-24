@@ -26,7 +26,7 @@ public class LockerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Locker> getLockerById(@PathVariable Long id) {
+    public ResponseEntity<Locker> getLockerById(@PathVariable("id") Long id) {
         Optional<Locker> locker = lockerService.getLockerById(id);
         return locker.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -40,16 +40,20 @@ public class LockerController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Locker> createLocker(@RequestBody Locker locker) {
-        Locker createdLocker = lockerService.createLocker(locker);
-        return new ResponseEntity<>(createdLocker, HttpStatus.CREATED);
+    public ResponseEntity<Void> createLocker(@RequestParam Long id, @RequestParam String address, @RequestParam Float capacity) {
+        boolean createdLocker = lockerService.createLocker(id, address, capacity);
+        if (createdLocker) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Locker> updateLocker(@PathVariable Long id, @RequestParam String newAddress, @RequestParam Integer newCapacity) {
+    public ResponseEntity<Boolean> updateLocker(@PathVariable("id") Long id, @RequestParam(required = false) String address, @RequestParam(required = false) Float capacity) {
         Optional<Locker> optionalLocker = lockerService.getLockerById(id);
         if (optionalLocker.isPresent()) {
-            Locker updatedLocker = lockerService.updateLocker(id, newAddress, newCapacity);
+            boolean updatedLocker = lockerService.updateLocker(id, address, capacity);
             return ResponseEntity.ok(updatedLocker);
         } else {
             return ResponseEntity.notFound().build();
@@ -57,7 +61,7 @@ public class LockerController {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> deleteLocker(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteLocker(@PathVariable("id") long id) {
         Optional<Locker> lockerOptional = lockerService.getLockerById(id);
 
         if (lockerOptional.isPresent()) {
@@ -67,5 +71,4 @@ public class LockerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 }
