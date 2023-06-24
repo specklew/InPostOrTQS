@@ -34,7 +34,7 @@ public class ACPController {
     @Operation(description = "Show the home page to the user")
     @GetMapping("")
     public ResponseEntity<Resource> getDefaultPage() throws IOException {
-        Resource htmlResource = new ClassPathResource("design/eshop/ACP.html");
+        Resource htmlResource = new ClassPathResource("templates/adminPanel/ACP.html");
         return ResponseEntity.ok()
                 .contentType(MediaType.TEXT_HTML)
                 .body(htmlResource);
