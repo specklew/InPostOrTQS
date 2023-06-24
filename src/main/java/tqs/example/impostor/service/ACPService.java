@@ -37,9 +37,9 @@ public class ACPService {
         acp.setAddress(address);
         acp.setCapacity(capacity);
 
-        acpRepository.save(acp);
+        acpRepository.saveAndFlush(acp);
 
-        return acpRepository.existsById(id);
+        return true;
     }
 
     public Optional<ACP> getACPById(Long id) {
@@ -49,7 +49,6 @@ public class ACPService {
 
     public boolean updateACP(Long id, String address, double capacity) {
         Optional<ACP> acpOptional = acpRepository.findById(id);
-        // poprawione according to maciek's remarks @malwina
         if (acpOptional.isPresent()) {
             ACP acp = acpOptional.get();
             if (address != null) {

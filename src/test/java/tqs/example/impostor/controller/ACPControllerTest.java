@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import tqs.example.impostor.models.ACP;
@@ -48,7 +49,7 @@ class ACPControllerTest {
         List<ACP> acps = Collections.singletonList(acp);
         when(acpService.getAllACPs()).thenReturn(acps);
 
-        mockMvc.perform(get("/acp"))
+        mockMvc.perform(get("/acp/get/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].address", is("Address 1")))
@@ -59,10 +60,11 @@ class ACPControllerTest {
     void givenValidId_whenGetACPById_thenReturnACP() throws Exception {
         when(acpService.getACPById(1L)).thenReturn(Optional.of(acp));
 
-        mockMvc.perform(get("/acp/{id}", 1L))
+        mockMvc.perform(get("/acp/{id}", 1L).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.address", is("Address 1")))
-                .andExpect(jsonPath("$.capacity", is(0.5)));
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.address").value("Address 1"))
+                .andExpect(jsonPath("$.capacity").value(0.5));
     }
 
     @Test
@@ -128,10 +130,10 @@ class ACPControllerTest {
         String content = result.getResponse().getContentAsString();
         assertThat(content).isEmpty();
     }
-
-    //this one does not pass, idk why
+    
     @Test
     void givenExistingACPId_whenUpdateACP_thenReturnUpdatedACP() throws Exception {
+        when(acpService.getACPById(any())).thenReturn(Optional.of(acp));
         when(acpService.updateACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(true);
 
         MvcResult result = mockMvc.perform(put("/acp/update/{id}", String.valueOf(1L))
@@ -143,7 +145,6 @@ class ACPControllerTest {
         boolean updatedACP = Boolean.parseBoolean(result.getResponse().getContentAsString());
         assertThat(updatedACP).isTrue();
     }
-
 
 
     @Test
