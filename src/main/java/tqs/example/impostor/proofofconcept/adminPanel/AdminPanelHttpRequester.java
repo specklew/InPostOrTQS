@@ -69,14 +69,4 @@ public class AdminPanelHttpRequester {
 
         return result;
     }
-
-
-
-
-
-
-
-
-
-
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.models.Order;
 import tqs.example.impostor.service.AdminService;
@@ -40,15 +41,14 @@ public class AdminPanelController {
     }
 
     @PostMapping("/logged")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) throws IOException, ParseException {
+    public RedirectView login(@RequestParam("username") String username, @RequestParam("password") String password) throws IOException, ParseException {
         String loginResult = adminService.login(username, password);
         if (loginResult.equals("ACP")) {
-            // Login successful, redirect to the next page
-            getOrders(model);
-            return "adminPanel/deliveries";
+            // Login successful, redirect to the deliveries page
+            return new RedirectView("adminPanel/ACP");
         } else {
-            // Login failed, return to the login page with an error message
-            return "adminPanel/admin_login";
+            // Login failed, redirect back to the login page
+            return new RedirectView("/adminPanel");
         }
     }
 
@@ -85,21 +85,9 @@ public class AdminPanelController {
         return "adminPanel/ACP";
     }
 
-    @PostMapping("/deliveries")
+    @GetMapping("/deliveries")
     public String getOrders(Model model) throws IOException, ParseException {
         List<Order> orders = httpRequester.getOrdersFromRemoteServer();
-        System.out.println("Siema");
-        System.out.println(orders.get(0));
-        model.addAttribute("orders", orders);
-
-       return "adminPanel/deliveries";
-    }
-
-    @GetMapping("/deliveries")
-    public String getOrders2(Model model) throws IOException, ParseException {
-        List<Order> orders = httpRequester.getOrdersFromRemoteServer();
-        System.out.println("Siema");
-        System.out.println(orders.get(0));
         model.addAttribute("orders", orders);
 
         return "adminPanel/deliveries";
