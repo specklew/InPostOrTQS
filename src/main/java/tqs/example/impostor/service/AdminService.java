@@ -39,13 +39,6 @@ public class AdminService implements AdminServiceInterface{
         return true;
     }
 
-    public void createAdminProgrammatically() {
-        String username = "dummy";
-        String password = "password";
-
-        createAdmin(username, password);
-    }
-
     // Read
     public Admin getAdminById(Long id) {
         return adminRepository.findById(id).orElse(null);

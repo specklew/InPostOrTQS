@@ -22,14 +22,7 @@ public class OrderService {
         this.lockerRepository = lockerRepository;
     }
     public List<Order> getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
-
-        System.out.println("TEST 1");
-        for (Order order : orders) {
-            System.out.println(order);
-        }
-
-        return orders;
+        return orderRepository.findAll();
     }
 
 

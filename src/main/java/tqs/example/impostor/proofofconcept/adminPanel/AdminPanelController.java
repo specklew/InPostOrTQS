@@ -36,7 +36,6 @@ public class AdminPanelController {
     }
     @GetMapping()
     public String index() {
-        adminService.createAdminProgrammatically();
         return "adminPanel/admin_login";
     }
 
@@ -45,7 +44,8 @@ public class AdminPanelController {
         String loginResult = adminService.login(username, password);
         if (loginResult.equals("ACP")) {
             // Login successful, redirect to the next page
-            return "adminPanel/ACP";
+            getOrders(model);
+            return "adminPanel/deliveries";
         } else {
             // Login failed, return to the login page with an error message
             return "adminPanel/admin_login";
@@ -88,9 +88,21 @@ public class AdminPanelController {
     @PostMapping("/deliveries")
     public String getOrders(Model model) throws IOException, ParseException {
         List<Order> orders = httpRequester.getOrdersFromRemoteServer();
+        System.out.println("Siema");
+        System.out.println(orders.get(0));
         model.addAttribute("orders", orders);
 
        return "adminPanel/deliveries";
+    }
+
+    @GetMapping("/deliveries")
+    public String getOrders2(Model model) throws IOException, ParseException {
+        List<Order> orders = httpRequester.getOrdersFromRemoteServer();
+        System.out.println("Siema");
+        System.out.println(orders.get(0));
+        model.addAttribute("orders", orders);
+
+        return "adminPanel/deliveries";
     }
 
 

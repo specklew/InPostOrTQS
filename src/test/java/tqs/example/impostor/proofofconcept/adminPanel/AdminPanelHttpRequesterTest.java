@@ -1,6 +1,7 @@
 package tqs.example.impostor.proofofconcept.adminPanel;
 
 import org.json.simple.parser.ParseException;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +30,8 @@ class AdminPanelHttpRequesterTest {
     @InjectMocks
     AdminPanelHttpRequester requester;
 
-    @BeforeEach
-    void setUp() throws IOException, ParseException {
+    @Test
+    void whenGetAcpFromRemoteServer_thenReturnAcpObject() throws IOException, ParseException {
         // Mock the responses for the HTTP requests
         String acpResponse = """
             {
@@ -39,23 +40,7 @@ class AdminPanelHttpRequesterTest {
               "capacity": 1.2
             }""";
 
-        String ordersResponse = """
-            {
-              "orders": [
-                {
-                  "id": 1,
-                  "shopName": "pokeShop",
-                  "owner": "da",
-                  "deliverer": "FedUp"
-                }
-              ]
-            }""";
-
-        when(httpClient.doHttpGet(Mockito.any())).thenReturn(acpResponse, ordersResponse);
-    }
-
-    @Test
-    void whenGetAcpFromRemoteServer_thenReturnAcpObject() throws IOException, ParseException {
+        when(httpClient.doHttpGet(Mockito.any())).thenReturn(acpResponse);
         // Arrange
         String acpId = "0";
         ACP expectedAcp = new ACP();
@@ -73,6 +58,20 @@ class AdminPanelHttpRequesterTest {
 
     @Test
     void whenGetOrdersFromRemoteServer_thenReturnListOfOrders() throws IOException, ParseException {
+        //Mock
+        String ordersResponse = """
+            {
+              "orders": [
+                {
+                  "id": 1,
+                  "shopName": "pokeShop",
+                  "owner": "da",
+                  "deliverer": "FedUp"
+                }
+              ]
+            }""";
+
+        when(httpClient.doHttpGet(Mockito.any())).thenReturn(ordersResponse);
         // Arrange
         Order expectedOrder = new Order();
         expectedOrder.setId(1L);
@@ -80,6 +79,7 @@ class AdminPanelHttpRequesterTest {
         expectedOrder.setOwner("da");
         expectedOrder.setDeliverer("FedUp");
         List<Order> expectedOrders = List.of(expectedOrder);
+        //System.out.println(expectedOrders.get(0));
 
         // Act
         List<Order> actualOrders = requester.getOrdersFromRemoteServer();
