@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACPs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+  <style>
+    html {
+      background-color: #f0f0f0;
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .button.is-black {
+      background-color: #000;
+      color: #fff;
+    }
+    .button.is-black:hover {
+      background-color: #ab9c04 !important;
+      color: #fff !important;
+      border-color: #ab9c04 !important;
+      box-shadow: none !important;
+    }
+    .submit-button {
+      margin-top: 30px;
+      margin-left: 15px;
+    }
+    .navbar-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 150px;
+    }
+    .navbar-center span {
+      color: #000;
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: 4px;
+    }
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+    .action-buttons .button {
+      margin: 0 20px;
+      font-size: 24px;
+      padding: 20px 40px;
+    }
+    .button.is-green {
+      background-color: green;
+      color: #fff;
+    }
+    .button.is-green:hover {
+      background-color: darkgreen !important;
+    }
+    .button.is-red {
+      background-color: red;
+      color: #fff;
+    }
+    .button.is-red:hover {
+      background-color: darkred !important;
+    }
+  </style>
+</head>
+
+<body>
+<!-- Navbar -->
+<div class="navbar-center">
+  <span class="is-uppercase">InPostor Locker</span>
+</div>
+
+<div th:if="${order != null}" class="box">
+  <h2 class="subtitle">Order Information</h2>
+  <table class="table is-fullwidth">
+    <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Shop Name</th>
+      <th>Owner</th>
+      <th>Deliverer</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${order.id}"></td>
+      <td th:text="${order.shopName}"></td>
+      <td th:text="${order.owner}"></td>
+      <td th:text="${order.deliverer}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="action-buttons">
+  <button class="button is-green">Receive package</button>
+  <button class="button is-red">Not my order</button>
+</div>
+
+<!-- Ionicons -->
+<script
+        type="module"
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+></script>
+<script
+        nomodule
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+></script>
+</body>
+
+</html>

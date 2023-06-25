@@ -44,9 +44,10 @@ public class AdminPanelHttpRequester {
     }
 
     public List<Order> getOrdersFromRemoteServer() throws IOException, ParseException {
-        String response = httpClient.doHttpGet(websiteAddress + "/deliveries");
+        String response = httpClient.doHttpGet(websiteAddress + "/deliveries/all");
         System.out.println("Response: " + response);
 
+        // Assuming response is a JSON object
         JSONObject jsonResponse = (JSONObject) new JSONParser().parse(response);
         JSONArray orderJsonArray = (JSONArray) jsonResponse.get("orders");
 
@@ -60,17 +61,12 @@ public class AdminPanelHttpRequester {
             order.setShopName((String) orderJsonObject.get("shopName"));
             order.setOwner((String) orderJsonObject.get("owner"));
             order.setDeliverer((String) orderJsonObject.get("deliverer"));
+            order.setAcp((ACP) orderJsonObject.get("acp"));
+            order.setLocker((Locker) orderJsonObject.get("locker"));
 
             result.add(order);
         }
 
         return result;
     }
-
-
-
-
-
-
-
 }
