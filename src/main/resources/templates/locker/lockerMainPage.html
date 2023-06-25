@@ -85,9 +85,9 @@
 </div>
 
 <div class="form-container">
-  <form>
+  <form action="/locker/order/get" method="post">
     <label for="order-id" style="font-size: 24px;">Parcel number:</label>
-    <input type="text" id="order-id" name="order-id">
+    <input type="text" id="order-id" name="id"> <!-- Added name attribute -->
     <div class="number-keyboard">
       <button type="button" onclick="appendNumber(1)">1</button>
       <button type="button" onclick="appendNumber(2)">2</button>
