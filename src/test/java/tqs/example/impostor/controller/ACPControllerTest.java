@@ -40,7 +40,7 @@ class ACPControllerTest {
        acp = new ACP();
        acp.setId(1L);
        acp.setAddress("Address 1");
-       acp.setCapacity(0.5f);
+       acp.setCapacity(0.5);
 
    }
 
@@ -106,7 +106,7 @@ class ACPControllerTest {
 
     @Test
     void givenValidACPData_whenCreateACP_thenReturnCreatedACP() throws Exception {
-        when(acpService.createACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(true);
+        when(acpService.createACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyDouble())).thenReturn(true);
 
         mockMvc.perform(post("/acp/create")
                         .param("id", String.valueOf(1L))
@@ -118,7 +118,7 @@ class ACPControllerTest {
 
     @Test
     void givenInvalidACPData_whenCreateACP_thenReturnEmptyContent() throws Exception {
-        when(acpService.createACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(false);
+        when(acpService.createACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyDouble())).thenReturn(false);
 
         MvcResult result = mockMvc.perform(post("/acp/create")
                         .param("id", String.valueOf(1L))
@@ -134,7 +134,7 @@ class ACPControllerTest {
     @Test
     void givenExistingACPId_whenUpdateACP_thenReturnUpdatedACP() throws Exception {
         when(acpService.getACPById(any())).thenReturn(Optional.of(acp));
-        when(acpService.updateACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(true);
+        when(acpService.updateACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyDouble())).thenReturn(true);
 
         MvcResult result = mockMvc.perform(put("/acp/update/{id}", String.valueOf(1L))
                         .param("address", "Updated Address")
@@ -149,7 +149,7 @@ class ACPControllerTest {
 
     @Test
     void givenNonExistingACPId_whenUpdateACP_tenReturnNotFound() throws Exception {
-        when(acpService.updateACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyFloat())).thenReturn(false);
+        when(acpService.updateACP(Mockito.anyLong(), Mockito.anyString(), Mockito.anyDouble())).thenReturn(false);
 
         MvcResult result = mockMvc.perform(put("/acp/update/{id}", String.valueOf(1L))
                         .param("address", "Invalid Address")
