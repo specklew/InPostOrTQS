@@ -22,12 +22,16 @@ public class OrderService {
         this.lockerRepository = lockerRepository;
     }
     public List<Order> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+
         System.out.println("TEST 1");
-        for(int i = 0 ; i <  orderRepository.findAll().size() ; i++){
-            System.out.println(orderRepository.findAll().get(i));
+        for (Order order : orders) {
+            System.out.println(order);
         }
-        return orderRepository.findAll();
+
+        return orders;
     }
+
 
     //Create.
     /**

@@ -110,8 +110,8 @@ public class AdminController {
     public ResponseEntity<List<Order>> getAllOrders(){
         List<Order> orders = adminService.getPendingOrders();
         System.out.println("TEST 3");
-        for(int i = 0 ; i <  orders.size() ; i++){
-            System.out.println(orders.get(i));
+        for (Order order : orders) {
+            System.out.println(order);
         }
         return ResponseEntity.ok(orders);
     }

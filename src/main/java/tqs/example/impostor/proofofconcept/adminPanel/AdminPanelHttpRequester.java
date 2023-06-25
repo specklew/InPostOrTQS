@@ -47,6 +47,7 @@ public class AdminPanelHttpRequester {
         String response = httpClient.doHttpGet(websiteAddress + "/deliveries");
         System.out.println("Response: " + response);
 
+        // Assuming response is a JSON object
         JSONObject jsonResponse = (JSONObject) new JSONParser().parse(response);
         JSONArray orderJsonArray = (JSONArray) jsonResponse.get("orders");
 
@@ -66,6 +67,9 @@ public class AdminPanelHttpRequester {
 
         return result;
     }
+
+
+
 
 
 

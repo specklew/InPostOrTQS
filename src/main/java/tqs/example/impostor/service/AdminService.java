@@ -92,13 +92,16 @@ public class AdminService implements AdminServiceInterface{
     //Function below is waiting for Order Service
     @Override
     public List<Order> getPendingOrders() {
+        List<Order> allOrders = orderService.getAllOrders();
+
         System.out.println("TEST 2");
-        for(int i = 0 ; i <  orderService.getAllOrders().size() ; i++){
-            System.out.println(orderService.getAllOrders().get(i));
+        for (Order allOrder : allOrders) {
+            System.out.println(allOrder);
         }
 
-        return orderService.getAllOrders();
+        return allOrders;
     }
+
 
     public Optional<ACP> searchACPById(Long acpId) {
         return acpService.getACPById(acpId);
