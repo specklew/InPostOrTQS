@@ -14,7 +14,7 @@ import java.util.Optional;
 public class LockerPanelHttpRequester {
 
     private final BasicHttpClient httpClient;
-    private final static String websiteAddress = "http://localhost:8080";
+    private static final String websiteAddress = "http://localhost:8080";
     public LockerPanelHttpRequester() {
         this.httpClient = new BasicHttpClient();
     }

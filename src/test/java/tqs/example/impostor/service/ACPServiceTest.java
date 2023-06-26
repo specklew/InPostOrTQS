@@ -40,9 +40,8 @@ class ACPServiceTest {
     @Test
     void createACP_NullAddress_ReturnsFalse() {
         Long id = 1L;
-        String address = null;
         double capacity = 10.0;
-        boolean result = acpService.createACP(id, address, capacity);
+        boolean result = acpService.createACP(id, null, capacity);
         assertFalse(result);
     }
 

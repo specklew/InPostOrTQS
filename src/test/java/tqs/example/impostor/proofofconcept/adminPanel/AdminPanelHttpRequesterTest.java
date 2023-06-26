@@ -1,8 +1,6 @@
 package tqs.example.impostor.proofofconcept.adminPanel;
 
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.models.Order;
 import tqs.example.impostor.proofofconcept.BasicHttpClient;
-import tqs.example.impostor.proofofconcept.eshop.EShopHttpRequester;
 
 import java.io.IOException;
 import java.util.List;

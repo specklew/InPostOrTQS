@@ -10,8 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.models.Locker;
-import tqs.example.impostor.repository.ACPRepository;
 import tqs.example.impostor.models.Order;
+import tqs.example.impostor.repository.ACPRepository;
 import tqs.example.impostor.repository.LockerRepository;
 import tqs.example.impostor.repository.OrderRepository;
 
@@ -21,7 +21,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +40,7 @@ class OrderServiceTest {
 
     private ACP acp;
     private Locker locker;
-    private List<Order> orders = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
 
     @BeforeEach
     void setUp() {

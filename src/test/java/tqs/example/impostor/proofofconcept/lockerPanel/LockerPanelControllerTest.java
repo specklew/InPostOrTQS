@@ -1,14 +1,11 @@
 package tqs.example.impostor.proofofconcept.lockerPanel;
 
-import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tqs.example.impostor.models.Order;
-import tqs.example.impostor.proofofconcept.lockerPanel.LockerPanelController;
-import tqs.example.impostor.proofofconcept.lockerPanel.LockerPanelHttpRequester;
 import tqs.example.impostor.service.LockerService;
 
 import java.util.Optional;

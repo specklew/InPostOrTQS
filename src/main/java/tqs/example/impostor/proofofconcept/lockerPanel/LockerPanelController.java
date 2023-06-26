@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.models.Order;
-import tqs.example.impostor.proofofconcept.adminPanel.AdminPanelHttpRequester;
 import tqs.example.impostor.service.LockerService;
 
 import java.io.IOException;
@@ -22,11 +20,8 @@ public class LockerPanelController {
 
     LockerPanelHttpRequester httpRequester;
 
-    private final LockerService lockerService;
-
     @Autowired
     LockerPanelController(LockerPanelHttpRequester requester, LockerService service){
-        this.lockerService = service;
         this.httpRequester = requester;
     }
 

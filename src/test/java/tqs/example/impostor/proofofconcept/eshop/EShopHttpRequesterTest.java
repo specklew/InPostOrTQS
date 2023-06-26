@@ -70,7 +70,7 @@ class EShopHttpRequesterTest {
     }
 
     @Test
-    void givenParameters_whenPostNewOrder_thenReturnTrue() throws IOException, URISyntaxException, ParseException {
+    void givenParameters_whenPostNewOrder_thenReturnTrue() throws IOException, URISyntaxException {
         assertThat(requester.postNewOrder(
                 parameters1.get(0).getValue(),
                 parameters1.get(1).getValue(),
