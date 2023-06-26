@@ -52,7 +52,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: v1.0
+          tags: your-project-id/your-image:sha-${{ github.sha }}
           registry: gcr.io
           repo: tqsproj/TQS
 
@@ -67,7 +67,7 @@ jobs:
       - name: Deploy to GCP
         run: |
           gcloud run deploy Piotr \
-            --image gcr.io/tqsproj/TQS:v1.0 \
+            --image gcr.io/tqsproj/TQS:sha-${{ github.sha }} \
             --platform managed \
             --region europe-west1 
           gcloud run services describe TQS --platform managed --region europe-west1 --format 'value(status.url)'
