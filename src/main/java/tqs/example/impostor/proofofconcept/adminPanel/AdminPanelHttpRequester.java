@@ -20,7 +20,7 @@ import java.util.Optional;
 public class AdminPanelHttpRequester {
 
     private final BasicHttpClient httpClient;
-    private final String websiteAddress = "http://localhost:8080";
+    private static final String websiteAddress = "http://localhost:8080";
 
     public AdminPanelHttpRequester() {
         this.httpClient = new BasicHttpClient();

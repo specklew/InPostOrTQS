@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import tqs.example.impostor.models.Locker;
@@ -33,7 +32,7 @@ class LockerControllerTest {
     private Locker locker;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         locker = new Locker();
         locker.setId(1L);
         locker.setAddress("Address 1");

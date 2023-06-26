@@ -3,6 +3,7 @@ package tqs.example.impostor.proofofconcept.adminPanel;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +12,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import tqs.example.impostor.models.ACP;
 import tqs.example.impostor.models.Order;
 import tqs.example.impostor.service.AdminService;
-import org.springframework.ui.Model;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +39,7 @@ public class AdminPanelController {
     }
 
     @PostMapping("/logged")
-    public RedirectView login(@RequestParam("username") String username, @RequestParam("password") String password) throws IOException, ParseException {
+    public RedirectView login(@RequestParam("username") String username, @RequestParam("password") String password) {
         String loginResult = adminService.login(username, password);
         if (loginResult.equals("ACP")) {
             // Login successful, redirect to the deliveries page

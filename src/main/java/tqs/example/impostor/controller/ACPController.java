@@ -1,13 +1,8 @@
 package tqs.example.impostor.controller;
 
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
-//import io.swagger.annotations.ApiResponse;
-//import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;

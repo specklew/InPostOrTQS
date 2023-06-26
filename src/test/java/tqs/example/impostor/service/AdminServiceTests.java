@@ -8,21 +8,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import tqs.example.impostor.models.Admin;
 import tqs.example.impostor.repository.AdminRepository;
-import tqs.example.impostor.models.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AdminServiceTests {
+ class AdminServiceTests {
 
     @Mock(lenient = true)
     private AdminRepository adminRepository;
@@ -30,10 +27,10 @@ public class AdminServiceTests {
     @InjectMocks
     private AdminService adminService;
 
-    private List<Admin> admins = new ArrayList<>();
+    private final List<Admin> admins = new ArrayList<>();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         Admin admin1 = new Admin();
         admin1.setId(2137L);
@@ -47,16 +44,16 @@ public class AdminServiceTests {
     }
 
     @Test
-    public void givenCorrectData_whenSaveAdmin_thenReturnTrue() {
+     void givenCorrectData_whenSaveAdmin_thenReturnTrue() {
         assertThat(adminService.createAdmin("userName", "password")).isTrue();
     }
     @Test
-    public void givenWrongData_whenSaveAdmin_thenReturnFalse() {
+     void givenWrongData_whenSaveAdmin_thenReturnFalse() {
         assertThat(adminService.createAdmin(null, null)).isFalse();
     }
 
     @Test
-    public void givenAdminId_whenGetAdminById_thenReturnAdmin() {
+     void givenAdminId_whenGetAdminById_thenReturnAdmin() {
         Long adminId = 1L;
         Admin admin = new Admin("username", "password");
         admin.setId(adminId);
@@ -70,17 +67,17 @@ public class AdminServiceTests {
     }
 
     @Test
-    public void givenCorrectData_whenUpdateAdmin_thenReturnTrue() {
+     void givenCorrectData_whenUpdateAdmin_thenReturnTrue() {
         assertThat(adminService.updateAdmin(admins.get(0).getId(), "newUserName", "newPassword")).isTrue();
     }
 
     @Test
-    public void givenWrongData_whenUpdateAdmin_thenReturnFalse() {
+     void givenWrongData_whenUpdateAdmin_thenReturnFalse() {
         assertThat(adminService.updateAdmin(admins.get(0).getId(), null, null)).isFalse();
     }
 
     @Test
-    public void givenAdminId_whenDeleteAdmin_thenVerifyDeleteOperation() {
+     void givenAdminId_whenDeleteAdmin_thenVerifyDeleteOperation() {
         Long adminId = 1L;
 
         adminService.deleteAdmin(adminId);
@@ -89,7 +86,7 @@ public class AdminServiceTests {
     }
 
     @Test
-    public void givenValidUserNameAndPassword_whenPasswordVerification_thenReturnsTrue() {
+     void givenValidUserNameAndPassword_whenPasswordVerification_thenReturnsTrue() {
         String userName = "admin";
         String password = "password";
         Admin admin = new Admin(userName, password);
@@ -102,7 +99,7 @@ public class AdminServiceTests {
     }
 
     @Test
-    public void givenInvalidUserNameAndPassword_whenPasswordVerification_thenReturnsFalse() {
+     void givenInvalidUserNameAndPassword_whenPasswordVerification_thenReturnsFalse() {
         String userName = "admin";
         String password = "password";
 
@@ -114,7 +111,7 @@ public class AdminServiceTests {
     }
 
     @Test
-    public void givenValidUserNameAndPassword_whenLogin_thenReturnsACP() {
+     void givenValidUserNameAndPassword_whenLogin_thenReturnsACP() {
         String userName = "admin";
         String password = "password";
         Admin admin = new Admin(userName, password);
@@ -127,7 +124,7 @@ public class AdminServiceTests {
     }
 
     @Test
-    public void givenInvalidUserNameAndPassword_whenLogin_thenReturnsLoginFailed() {
+     void givenInvalidUserNameAndPassword_whenLogin_thenReturnsLoginFailed() {
         String userName = "admin";
         String password = "password";
 

@@ -29,7 +29,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenValidUsernameAndPassword_whenCreateAdmin_thenReturnAdminCreatedSuccessfully() {
+    void givenValidUsernameAndPassword_whenCreateAdmin_thenReturnAdminCreatedSuccessfully() {
         String username = "admin";
         String password = "password";
 
@@ -42,7 +42,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenNullUsernameAndPassword_whenCreateAdmin_thenReturnInvalidUsernameOrPassword() {
+    void givenNullUsernameAndPassword_whenCreateAdmin_thenReturnInvalidUsernameOrPassword() {
         String username = null;
         String password = null;
 
@@ -53,7 +53,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenFailedAdminCreation_whenCreateAdmin_thenReturnFailedToCreateAdmin() {
+    void givenFailedAdminCreation_whenCreateAdmin_thenReturnFailedToCreateAdmin() {
         String username = "admin";
         String password = "password";
 
@@ -66,7 +66,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenExistingAdmin_whenGetAdminById_theReturnsAdminWithOkStatus() {
+    void givenExistingAdmin_whenGetAdminById_theReturnsAdminWithOkStatus() {
         Long adminId = 1L;
         Admin admin = new Admin("username", "password");
         admin.setId(adminId);
@@ -81,7 +81,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenNonexistentAdmin_whenGetAdminById_thenReturnsNotFoundStatus() {
+    void givenNonexistentAdmin_whenGetAdminById_thenReturnsNotFoundStatus() {
         Long adminId = 1L;
         when(adminService.getAdminById(adminId)).thenReturn(null);
 
@@ -92,7 +92,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenValidIdAndUsername_whenUpdateAdmin_thenReturnAdminUpdatedSuccessfully() {
+    void givenValidIdAndUsername_whenUpdateAdmin_thenReturnAdminUpdatedSuccessfully() {
         Long id = 1L;
         String username = "newAdmin";
 
@@ -110,7 +110,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenInvalidId_whenUpdateAdmin_thenReturnNotFound() {
+    void givenInvalidId_whenUpdateAdmin_thenReturnNotFound() {
         Long id = 1L;
 
         when(adminService.getAdminById(id)).thenReturn(null);
@@ -122,7 +122,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenNoUpdateParametersProvided_whenUpdateAdmin_thenReturnBadRequest() {
+    void givenNoUpdateParametersProvided_whenUpdateAdmin_thenReturnBadRequest() {
         Long id = 1L;
 
         Admin admin = new Admin("admin", "password");
@@ -139,7 +139,7 @@ class AdminControllerTest {
 
 
     @Test
-    public void givenExistingAdmin_whenDeleteAdmin_thenReturnsNoContentStatus() {
+     void givenExistingAdmin_whenDeleteAdmin_thenReturnsNoContentStatus() {
         Long adminId = 1L;
 
         ResponseEntity<Void> response = adminController.deleteAdmin(adminId);
@@ -149,7 +149,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenValidCredentials_whenLogin_thenReturnsOkStatus() {
+     void givenValidCredentials_whenLogin_thenReturnsOkStatus() {
         String username = "admin";
         String password = "password";
         when(adminService.login(username, password)).thenReturn("ACP");
@@ -163,7 +163,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenInvalidCredentials_whenLogin_thenReturnsUnauthorizedStatus() {
+     void givenInvalidCredentials_whenLogin_thenReturnsUnauthorizedStatus() {
         String username = "admin";
         String password = "password";
         when(adminService.login(username, password)).thenReturn("Login failed");
@@ -177,7 +177,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenExistingACPId_whenSearchACPById_thenReturnACP() {
+     void givenExistingACPId_whenSearchACPById_thenReturnACP() {
         Long acpId = 1L;
         ACP acp = new ACP("Address", 100.0f);
         acp.setId(acpId);
@@ -193,7 +193,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenNonExistingACPId_whenSearchACPById_thenReturnNotFound() {
+     void givenNonExistingACPId_whenSearchACPById_thenReturnNotFound() {
         Long acpId = 1L;
         Optional<ACP> optionalACP = Optional.empty();
 
@@ -206,7 +206,7 @@ class AdminControllerTest {
     }
 
     @Test
-    public void givenValidACPParameters_whenAddACP_thenReturnSuccess() {
+     void givenValidACPParameters_whenAddACP_thenReturnSuccess() {
         Long acpId = 1L;
         String address = "Address";
         float capacity = 100.0f;
