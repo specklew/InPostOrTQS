@@ -51,13 +51,13 @@
         <div class="navbar-item">
             <div class="field">
                 <p class="control">
-                    <a href="ACP.html" class="button">
+                    <a href="/adminPanel/ACP" class="button">
                         <span class="icon">
                           <ion-icon name="navigate"></ion-icon>
                         </span>
                         <span>ACP Register</span>
                     </a>
-                    <a href="deliveries.html" class="button">
+                    <a href="/adminPanel/deliveries" class="button">
                         <span class="icon">
                           <ion-icon name="cart"></ion-icon>
                         </span>
@@ -73,25 +73,22 @@
 <div class="container">
     <table class="table is-fullwidth">
         <thead>
-        <tr>
-            <th>Parcel number</th>
-            <th>Buyer email address</th>
-            <th>
-                <a href="#" class="sortable-header" data-sort-by="order-date">Order date</a>
-                <span class="sort-icon"></span>
-            </th>
-            <th>
-                <a href="#" class="sortable-header" data-sort-by="delivery-date">Delivery Date</a>
-                <span class="sort-icon"></span>
-            </th>
-            <th>
-                <a href="#" class="sortable-header" data-sort-by="status">Status</a>
-                <span class="sort-icon"></span>
-            </th>
-        </tr>
+            <tr>
+                <th>Parcel number</th>
+                <th>Buyer name</th>
+                <th>Shop Name</th>
+                <th>ACP</th>
+                <th>Locker</th>
+            </tr>
         </thead>
         <tbody>
-        <!-- Add your table rows dynamically using JavaScript -->
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.getId()}"></td>
+                <td th:text="${order.getOwner()}"></td>
+                <td th:text="${order.getShopName()}"></td>
+                <td th:if="${order.getAcp() != null}" th:text="${order.getAcp().getAddress()}"></td>
+                <td th:if="${order.getLocker() != null}" th:text="${order.getLocker().getAddress()}"></td>
+            </tr>
         </tbody>
     </table>
 </div>

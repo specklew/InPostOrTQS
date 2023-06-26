@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -39,6 +39,7 @@
 </head>
 
 <body>
+
 <!-- Navbar -->
 <nav class="navbar has-shadow" role="navigation">
   <div class="navbar-brand">
@@ -56,16 +57,16 @@
     <div class="navbar-item">
       <div class="field">
         <p class="control">
-          <a th:href="@{/adminPanel/ACP}" class="button">
-            <span class="icon">
-              <ion-icon name="navigate"></ion-icon>
-            </span>
+          <a href="/adminPanel/ACP" class="button">
+                        <span class="icon">
+                          <ion-icon name="navigate"></ion-icon>
+                        </span>
             <span>ACP Register</span>
           </a>
-          <a th:href="@{/adminPanel/deliveries}" class="button">
-            <span class="icon">
-              <ion-icon name="cart"></ion-icon>
-            </span>
+          <a href="/adminPanel/deliveries" class="button">
+                        <span class="icon">
+                          <ion-icon name="cart"></ion-icon>
+                        </span>
             <span>Deliveries</span>
           </a>
         </p>

@@ -34,6 +34,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.readOrder(id));
     }
 
+    @Operation(description = "Get all orders in repository")
+    @GetMapping("/get/all")
+    public ResponseEntity<List<Order>> readAllOrders(){
+        return ResponseEntity.ok(orderService.readAllOrders());
+    }
+
     @Operation(description = "Get orders by ACP address")
     @GetMapping("/getByACPAddress/{address}")
     public ResponseEntity<List<Order>> readOrdersByACPAddress(@PathVariable("address") String address){

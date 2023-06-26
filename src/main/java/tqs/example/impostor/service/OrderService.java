@@ -67,6 +67,14 @@ public class OrderService {
     }
 
     /**
+     * @return - List of all orders in repository.
+     */
+    public List<Order> readAllOrders() {
+        return orderRepository.findAll();
+    }
+
+
+    /**
      * @param acpAddress The address of the ACP that the orders are sent to.
      * @return - List of orders that were sent to that ACP.
      */
