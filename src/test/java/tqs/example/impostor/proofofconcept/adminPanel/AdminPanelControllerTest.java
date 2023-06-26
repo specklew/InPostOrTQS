@@ -69,14 +69,14 @@ class AdminPanelControllerTest {
 
     @Test
     void testACPPage() throws Exception {
-        mockMvc.perform(get("/adminPanel/adminPanel/ACP"))
+        mockMvc.perform(get("/adminPanel/ACP"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("adminPanel/ACP"));
     }
 
     @Test
     void testDeliveriesPage() throws Exception {
-        mockMvc.perform(get("/adminPanel/adminPanel/deliveries"))
+        mockMvc.perform(get("/adminPanel/deliveries"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("adminPanel/deliveries"));
     }
