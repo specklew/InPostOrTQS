@@ -52,7 +52,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: your-project-id/your-image:sha-${{ github.sha }}
+          tags: tqsproj/TQS:sha-${{ github.sha }}
           registry: gcr.io
           repo: tqsproj/TQS
 
