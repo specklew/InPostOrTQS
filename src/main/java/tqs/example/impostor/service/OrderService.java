@@ -21,9 +21,6 @@ public class OrderService {
         this.acpRepository = acpRepository;
         this.lockerRepository = lockerRepository;
     }
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
-    }
 
 
     //Create.
