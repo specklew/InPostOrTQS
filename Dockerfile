@@ -1,20 +1,14 @@
-## Fetching latest version of Java
-#FROM openjdk:19
-#FROM maven:3.6.3 AS maven
-## Setting up work directory
-#WORKDIR /app
-#
-## Copy the jar file into our app
-#COPY . /app
-#RUN mvn install
-## Exposing port 3000
-#EXPOSE 3000
-#ARG JAR_FILE=airquality.jar
-#
-## Starting the application
-#CMD ["java", "-jar", "airquality.jar"]
-FROM openjdk:19
-EXPOSE 3000
-ADD target/inpostor.jar inpostor_jar.jar
-ENTRYPOINT ["java", "-jar", "/inpostor.jar"]
-#chuj
+# Use the official OpenJDK 17 Alpine base image
+FROM openjdk:17-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the Spring Boot executable JAR file into the container
+COPY target/inpostor.jar .
+
+# Expose the port on which your Spring Boot application listens
+EXPOSE 8080
+
+# Define the command to run your application
+CMD ["java", "-jar", "inpostor.jar"]
