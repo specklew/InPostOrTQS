@@ -89,6 +89,7 @@ class OrderServiceTest {
             when(orderRepository.existsById(order.getId())).thenReturn(true);
         }
 
+        when(orderRepository.findAll()).thenReturn(orders);
         when(orderRepository.findAllByAcp(acp)).thenReturn(orders);
         when(orderRepository.findAllByLocker(locker)).thenReturn(orders);
         when(orderRepository.findAllByOwner("owner1")).thenReturn(List.of(order1, order3));
@@ -118,6 +119,11 @@ class OrderServiceTest {
     @Test
     void givenWrongOrderId_whenReadOrder_thenReturnNull() {
         assertThat(service.readOrder(-1L)).isNull();
+    }
+
+    @Test
+    void whenReadAllOrders_thenReturnListOfOrders() {
+        assertThat(service.readAllOrders()).isEqualTo(orders);
     }
 
     @Test

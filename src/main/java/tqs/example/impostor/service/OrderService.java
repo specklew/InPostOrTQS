@@ -21,9 +21,6 @@ public class OrderService {
         this.acpRepository = acpRepository;
         this.lockerRepository = lockerRepository;
     }
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
-    }
 
 
     //Create.
@@ -65,6 +62,14 @@ public class OrderService {
         Optional<Order> order = orderRepository.findById(id);
         return order.orElse(null);
     }
+
+    /**
+     * @return - List of all orders in repository.
+     */
+    public List<Order> readAllOrders() {
+        return orderRepository.findAll();
+    }
+
 
     /**
      * @param acpAddress The address of the ACP that the orders are sent to.

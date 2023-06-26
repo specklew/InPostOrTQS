@@ -50,16 +50,10 @@ public class AdminPanelController {
         }
     }
 
-    @GetMapping("/adminPanel/ACP")
+    @GetMapping("/ACP")
     public String acpPage() {
         // Logic for handling ACP page
         return "adminPanel/ACP";
-    }
-
-    @GetMapping("/adminPanel/deliveries")
-    public String deliveriesPage() {
-        // Logic for handling deliveries page
-        return "adminPanel/deliveries";
     }
 
     @PostMapping("/ACP/search")

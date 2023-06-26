@@ -82,10 +82,9 @@ public class AdminService implements AdminServiceInterface{
     }
 
 
-    //Function below is waiting for Order Service
     @Override
     public List<Order> getPendingOrders() {
-        List<Order> allOrders = orderService.getAllOrders();
+        List<Order> allOrders = orderService.readAllOrders();
 
         System.out.println("TEST 2");
         for (Order allOrder : allOrders) {

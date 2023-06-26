@@ -114,6 +114,28 @@ class OrderControllerTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0,1,2})
+    void whenGetAllOrders_thenReturnListOfOrders(int id) throws Exception {
+
+        List<Order> orderList = new ArrayList<>(orders);
+
+        when(service.readAllOrders()).thenReturn(orderList);
+
+        mvc.perform(get("/order/get/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[*].id",
+                        containsInAnyOrder(orderList.stream().map(order -> order.getId().intValue()).toArray())))
+                .andExpect(jsonPath("$[*].shopName",
+                        containsInAnyOrder(orderList.stream().map(Order::getShopName).toArray())))
+                .andExpect(jsonPath("$[*].acp.address",
+                        containsInAnyOrder(orderList.stream().map(order -> order.getAcp().getAddress()).toArray())))
+                .andExpect(jsonPath("$[*].owner",
+                        containsInAnyOrder(orderList.stream().map(Order::getOwner).toArray())))
+                .andExpect(jsonPath("$[*].deliverer",
+                        containsInAnyOrder(orderList.stream().map(Order::getDeliverer).toArray())));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0,1,2})
     void givenAcpAddress_whenGetOrdersByAcpAddress_thenReturnListOfOrders(int id) throws Exception {
 
         List<Order> orderList = new ArrayList<>();

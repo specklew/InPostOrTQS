@@ -57,16 +57,14 @@ class AdminPanelHttpRequesterTest {
     void whenGetOrdersFromRemoteServer_thenReturnListOfOrders() throws IOException, ParseException {
         //Mock
         String ordersResponse = """
-            {
-              "orders": [
+            [
                 {
                   "id": 1,
                   "shopName": "pokeShop",
                   "owner": "da",
                   "deliverer": "FedUp"
                 }
-              ]
-            }""";
+            ]""";
 
         when(httpClient.doHttpGet(Mockito.any())).thenReturn(ordersResponse);
         // Arrange
