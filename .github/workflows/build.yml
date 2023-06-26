@@ -52,9 +52,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: tqsproj/TQS:sha-${{ github.sha }}
+          tags: tqsproj/tqs:sha-${{ github.sha }}
           registry: gcr.io
-          repo: tqsproj/TQS
+          repo: tqsproj/tqs
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.3.0
@@ -67,7 +67,7 @@ jobs:
       - name: Deploy to GCP
         run: |
           gcloud run deploy Piotr \
-            --image gcr.io/tqsproj/TQS:sha-${{ github.sha }} \
+            --image gcr.io/tqsproj/tqs:sha-${{ github.sha }} \
             --platform managed \
             --region europe-west1 
-          gcloud run services describe TQS --platform managed --region europe-west1 --format 'value(status.url)'
+          gcloud run services describe tqs --platform managed --region europe-west1 --format 'value(status.url)'
